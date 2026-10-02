@@ -1,0 +1,1584 @@
+{
+  "version": 1,
+  "title": "LLM Fine-tuning",
+  "questions": [
+    {
+      "id": "Q21",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Which description captures the central idea of LoRA?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Freeze base weights and learn a low-rank update through smaller trainable matrices.",
+          "explanation": "LoRA represents the weight update with low-rank factors while preserving the pretrained weights during adapter training."
+        },
+        {
+          "id": "B",
+          "text": "Train every base-model parameter from random initialization.",
+          "explanation": "That describes training from scratch rather than low-rank adaptation."
+        },
+        {
+          "id": "C",
+          "text": "Store retrieved document chunks in the model’s context window.",
+          "explanation": "That is retrieval-augmented prompting rather than parameter adaptation."
+        },
+        {
+          "id": "D",
+          "text": "Change temperature until the model memorizes training examples.",
+          "explanation": "Temperature affects generation sampling, not learning a weight update."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "LoRA reduces trainable parameters by learning low-rank updates on a frozen base model.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.2.2 LoRA Fine-tuning"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "multiple",
+      "question": "Which uses of dataset splits are consistent with the lesson?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Use the training set to compute the loss that drives parameter updates.",
+          "explanation": "Training examples supply the learning signal for optimization."
+        },
+        {
+          "id": "B",
+          "text": "Use the validation set to monitor progress and compare training choices.",
+          "explanation": "Validation estimates how training choices perform on unseen but similar data."
+        },
+        {
+          "id": "C",
+          "text": "Use the test set for repeated hyperparameter selection and still call it an untouched final test.",
+          "explanation": "Repeated selection against the test set compromises its role as a final independent assessment."
+        },
+        {
+          "id": "D",
+          "text": "Use a separate test set for the final performance assessment.",
+          "explanation": "The lesson distinguishes final testing from training and validation."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "takeaway": "Train to learn, validate to select, and test to assess the final model.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.1 Model training status and metrics"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "In a run matching the lesson’s first experiment, learning_rate is 0.1 and both training and validation loss rise sharply. Data and code checks find no other fault. What should you try first?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Increase the number of epochs at the same learning rate.",
+          "explanation": "Longer training does not resolve the overly large update steps."
+        },
+        {
+          "id": "B",
+          "text": "Remove the validation set.",
+          "explanation": "Removing measurement hides failure rather than fixing optimization."
+        },
+        {
+          "id": "C",
+          "text": "Substantially lower the learning rate and observe the curves again.",
+          "explanation": "The lesson stabilizes this experiment by reducing the learning rate to 0.00005."
+        },
+        {
+          "id": "D",
+          "text": "Increase LoRA rank to its maximum.",
+          "explanation": "Increasing capacity does not directly address unstable update magnitude."
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "When update steps are too large, adjust the learning rate before extending the run.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.3.1 First experiment (takes about 1 minute)"
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "A one-epoch run finishes with training and validation losses still steadily improving, but task performance remains below target. What is the best next experiment?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Declare overfitting because training loss decreased.",
+          "explanation": "Overfitting is suggested by worsening validation performance while training performance improves."
+        },
+        {
+          "id": "B",
+          "text": "Train longer while continuing to monitor validation performance.",
+          "explanation": "The run may have stopped before sufficient learning; additional epochs can help while validation guards against overfitting."
+        },
+        {
+          "id": "C",
+          "text": "Throw away the validation data.",
+          "explanation": "Validation remains necessary to judge whether more training helps."
+        },
+        {
+          "id": "D",
+          "text": "Increase the learning rate to 0.1 regardless of the curves.",
+          "explanation": "The current optimization is stable; an arbitrary large step can destabilize it."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "If training remains useful on validation data, test additional training rather than assuming convergence.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.3.2 Second experiment (takes about 2 minutes)"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "section": "finetuning",
+      "difficulty": "challenging",
+      "type": "multiple",
+      "question": "A 100-example training run produces these losses:\nEpoch 1: train 1.1, validation 1.2\nEpoch 3: train 0.6, validation 0.7\nEpoch 10: train 0.2, validation 1.0\nWhich decisions are supported by this evidence?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Prefer the epoch-3 checkpoint among these candidates.",
+          "explanation": "It has the lowest validation loss, despite a higher training loss than epoch 10."
+        },
+        {
+          "id": "B",
+          "text": "Prefer epoch 10 solely because its training loss is lowest.",
+          "explanation": "The rising validation loss indicates poorer generalization despite improved training fit."
+        },
+        {
+          "id": "C",
+          "text": "Reduce excessive training or use early stopping.",
+          "explanation": "Validation deterioration is a reason to stop before further memorization."
+        },
+        {
+          "id": "D",
+          "text": "Expand the dataset with diverse, accurate examples.",
+          "explanation": "The lesson recommends more varied data to reduce memorization of a small set."
+        }
+      ],
+      "correct": [
+        "A",
+        "C",
+        "D"
+      ],
+      "takeaway": "Select by validation performance, not the lowest training loss.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.3.3 Third experiment (takes about 10 minutes)"
+        },
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "You have a small dataset for a simple output-format task. Which statements should guide LoRA rank selection?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Higher rank always improves unseen-task performance.",
+          "explanation": "Extra capacity can overfit limited data and is not a guaranteed quality improvement."
+        },
+        {
+          "id": "B",
+          "text": "A modest rank is a reasonable starting point for limited data and a simple task.",
+          "explanation": "The lesson recommends matching capacity to task complexity and data volume."
+        },
+        {
+          "id": "C",
+          "text": "Rank controls the number of retrieved document chunks.",
+          "explanation": "That is a retrieval setting such as top_k, not the LoRA update rank."
+        },
+        {
+          "id": "D",
+          "text": "Increasing rank adds trainable capacity and typically increases memory requirements.",
+          "explanation": "Larger low-rank factors contain more trainable parameters."
+        }
+      ],
+      "correct": [
+        "B",
+        "D"
+      ],
+      "takeaway": "LoRA rank is a capacity and resource trade-off, not a universal quality dial.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "section": "finetuning",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "On one GPU, an effective batch of 16 is desired, but only four samples fit per microbatch. Assuming gradients are accumulated before each optimizer update, which configuration meets the target?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Microbatch 4, accumulation 1.",
+          "explanation": "This uses only four samples per optimizer update."
+        },
+        {
+          "id": "B",
+          "text": "Microbatch 2, accumulation 4.",
+          "explanation": "This gives an effective batch of eight samples."
+        },
+        {
+          "id": "C",
+          "text": "Microbatch 16, accumulation 1.",
+          "explanation": "This exceeds the stated memory constraint."
+        },
+        {
+          "id": "D",
+          "text": "Microbatch 4, accumulation 4.",
+          "explanation": "Four microbatches of four samples contribute to each optimizer update, giving an effective batch of 16."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Gradient accumulation can raise the effective batch size without holding that whole batch in memory at once.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "batch_size"
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Many training answers lose their final steps because samples are truncated at max_length = 256. What is the best next action?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Inspect token-length distribution and choose a larger supported limit, adjusting batch size if memory requires it.",
+          "explanation": "The lesson links sequence length to complete training information and memory trade-offs."
+        },
+        {
+          "id": "B",
+          "text": "Increase inference temperature during training.",
+          "explanation": "Sampling temperature does not restore truncated training tokens."
+        },
+        {
+          "id": "C",
+          "text": "Reduce max_length to 128 to improve completeness.",
+          "explanation": "A smaller limit would truncate even more content."
+        },
+        {
+          "id": "D",
+          "text": "Repeat the truncated dataset for more epochs.",
+          "explanation": "Repeating incomplete examples cannot restore the missing answer steps."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Choose training sequence length from the data and available memory, not an arbitrary small cap.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "max_length"
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "A long run only evaluates at the end, after the model has already overfit. Which changes improve checkpoint selection?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Evaluate periodically during training.",
+          "explanation": "Intermediate validation can expose when generalization begins to deteriorate."
+        },
+        {
+          "id": "B",
+          "text": "Evaluate every step regardless of training cost.",
+          "explanation": "Very frequent evaluation can consume excessive time; the interval should balance visibility and overhead."
+        },
+        {
+          "id": "C",
+          "text": "Retain the checkpoint with the best validation performance.",
+          "explanation": "The lesson’s workflow preserves the checkpoint with the lowest validation loss."
+        },
+        {
+          "id": "D",
+          "text": "Select checkpoints using training loss alone.",
+          "explanation": "Training loss can keep improving after validation performance worsens."
+        }
+      ],
+      "correct": [
+        "A",
+        "C"
+      ],
+      "takeaway": "Evaluation frequency should reveal useful checkpoints without dominating training time.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "eval_steps"
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "section": "finetuning",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "A company has a large policy library that changes weekly and very few reliable labeled examples. Its main failure is missing current policy facts. Which first approach best fits these constraints?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Retrain from scratch whenever a policy changes.",
+          "explanation": "This is disproportionate to a factual knowledge-access problem and the available data."
+        },
+        {
+          "id": "B",
+          "text": "Use retrieval over maintained policy documents and evaluate the grounded answers.",
+          "explanation": "The lesson recommends knowledge-base retrieval when labeled data is insufficient; maintained documents can supply the needed facts."
+        },
+        {
+          "id": "C",
+          "text": "Duplicate the same few labeled examples until the row count is large.",
+          "explanation": "Duplicates do not provide the diversity and coverage needed for generalization."
+        },
+        {
+          "id": "D",
+          "text": "Raise LoRA rank to compensate for missing policy evidence.",
+          "explanation": "More adaptation capacity does not supply reliable current source information."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Choose retrieval for access to maintained knowledge; reserve fine-tuning for needs supported by suitable training data.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "Fine-tuning dataset construction strategy"
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "A scalar weight is w = 2.0, its current loss gradient is +3.0, and the learning rate is 0.1. What is the next weight under a plain gradient-descent update?",
+      "options": [
+        {
+          "id": "A",
+          "text": "2.3",
+          "explanation": "Adding the gradient moves in the ascent direction for this update."
+        },
+        {
+          "id": "B",
+          "text": "1.9",
+          "explanation": "This subtracts the learning rate without multiplying by the gradient."
+        },
+        {
+          "id": "C",
+          "text": "1.7",
+          "explanation": "Gradient descent gives w_new = w - learning_rate × gradient = 2.0 - 0.1 × 3.0."
+        },
+        {
+          "id": "D",
+          "text": "0.6",
+          "explanation": "Multiplying the weight by the scaled gradient is not the gradient-descent rule."
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "The gradient sets the update direction; the learning rate scales the step.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.3 Gradient descent algorithm - automatically determining the optimal solution"
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "section": "finetuning",
+      "difficulty": "challenging",
+      "type": "multiple",
+      "question": "You trained a LoRA adapter and must choose how to deploy it. Which statements are supported by the lesson?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The adapter can run by itself as a complete language model.",
+          "explanation": "An adapter contains updates; it still needs the corresponding base model unless merged into a complete model."
+        },
+        {
+          "id": "B",
+          "text": "Dynamic adapter loading must use the appropriate base model.",
+          "explanation": "The lesson explicitly requires the base model used for fine-tuning."
+        },
+        {
+          "id": "C",
+          "text": "The adapter’s updates can be merged with the base weights to produce a standalone model.",
+          "explanation": "Parameter fusion exports complete updated weights for deployment."
+        },
+        {
+          "id": "D",
+          "text": "The best validation checkpoint is a sensible candidate for export.",
+          "explanation": "The lesson recommends exporting the best_model_checkpoint rather than blindly choosing the last one."
+        }
+      ],
+      "correct": [
+        "B",
+        "C",
+        "D"
+      ],
+      "takeaway": "Deploy the compatible base plus adapter, or export their merged weights as a complete model.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.5 Parameter matrix fusion"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does a loss function measure during training?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does a loss function measure during training?"
+        },
+        {
+          "id": "B",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "Correct: The model’s error on a training sample or prediction."
+        },
+        {
+          "id": "C",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "This is a related lesson concept (2.1.3 Gradient descent algorithm - automatically determining the optimal solution), but this card asks: What does a loss function measure during training?"
+        },
+        {
+          "id": "D",
+          "text": "To avoid biasing the model toward a dominant class.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What does a loss function measure during training?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The model’s error on a training sample or prediction.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.2 loss function & Cost function - quantifying model performance"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does a cost function summarize?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Updating model parameters from training examples and their loss.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What does a cost function summarize?"
+        },
+        {
+          "id": "B",
+          "text": "Aggregate model loss across the training dataset, often as an average.",
+          "explanation": "Correct: Aggregate model loss across the training dataset, often as an average."
+        },
+        {
+          "id": "C",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: What does a cost function summarize?"
+        },
+        {
+          "id": "D",
+          "text": "As a product of smaller low-rank trainable matrices.",
+          "explanation": "This is a related lesson concept (2.2.2 LoRA Fine-tuning), but this card asks: What does a cost function summarize?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Aggregate model loss across the training dataset, often as an average.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.2 loss function & Cost function - quantifying model performance"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Which direction does gradient descent move relative to the gradient?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Generalization to varied scenarios rather than memorization of narrow examples.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: Which direction does gradient descent move relative to the gradient?"
+        },
+        {
+          "id": "B",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Which direction does gradient descent move relative to the gradient?"
+        },
+        {
+          "id": "C",
+          "text": "Stop training when validation performance starts to deteriorate.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Which direction does gradient descent move relative to the gradient?"
+        },
+        {
+          "id": "D",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "Correct: Opposite the gradient, toward lower loss."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Opposite the gradient, toward lower loss.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.3 Gradient descent algorithm - automatically determining the optimal solution"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does the learning rate scale?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Aggregate model loss across the training dataset, often as an average.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What does the learning rate scale?"
+        },
+        {
+          "id": "B",
+          "text": "The size of each parameter update during optimization.",
+          "explanation": "Correct: The size of each parameter update during optimization."
+        },
+        {
+          "id": "C",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: What does the learning rate scale?"
+        },
+        {
+          "id": "D",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does the learning rate scale?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The size of each parameter update during optimization.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What can an excessively high learning rate cause?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: What can an excessively high learning rate cause?"
+        },
+        {
+          "id": "B",
+          "text": "Training loss falls while validation loss begins to rise.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What can an excessively high learning rate cause?"
+        },
+        {
+          "id": "C",
+          "text": "As a product of smaller low-rank trainable matrices.",
+          "explanation": "This is a related lesson concept (2.2.2 LoRA Fine-tuning), but this card asks: What can an excessively high learning rate cause?"
+        },
+        {
+          "id": "D",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "Correct: Updates can overshoot a minimum and make loss oscillate or rise."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Updates can overshoot a minimum and make loss oscillate or rise.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What can an excessively low learning rate cause?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Updating model parameters from training examples and their loss.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What can an excessively low learning rate cause?"
+        },
+        {
+          "id": "B",
+          "text": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What can an excessively low learning rate cause?"
+        },
+        {
+          "id": "C",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "This is a related lesson concept (2.1.3 Gradient descent algorithm - automatically determining the optimal solution), but this card asks: What can an excessively low learning rate cause?"
+        },
+        {
+          "id": "D",
+          "text": "Training can converge very slowly and waste time and compute.",
+          "explanation": "Correct: Training can converge very slowly and waste time and compute."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Training can converge very slowly and waste time and compute.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What is an epoch?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Generalization to varied scenarios rather than memorization of narrow examples.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What is an epoch?"
+        },
+        {
+          "id": "B",
+          "text": "The size of each parameter update during optimization.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is an epoch?"
+        },
+        {
+          "id": "C",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What is an epoch?"
+        },
+        {
+          "id": "D",
+          "text": "One complete pass through the training dataset.",
+          "explanation": "Correct: One complete pass through the training dataset."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "One complete pass through the training dataset.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "section": "finetuning",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What is a common sign of underfitting during training?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is a common sign of underfitting during training?"
+        },
+        {
+          "id": "B",
+          "text": "Both training and validation loss continue to fall without adequate task performance.",
+          "explanation": "Correct: Both training and validation loss continue to fall without adequate task performance."
+        },
+        {
+          "id": "C",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "This is a related lesson concept (2.1.3 Gradient descent algorithm - automatically determining the optimal solution), but this card asks: What is a common sign of underfitting during training?"
+        },
+        {
+          "id": "D",
+          "text": "Misleading examples teach the model incorrect patterns.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What is a common sign of underfitting during training?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Both training and validation loss continue to fall without adequate task performance.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.1 Model training status and metrics"
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a common sign of overfitting?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When exporting a merged standalone model for inference without adapter-loading support.",
+          "explanation": "This is a related lesson concept (3.5 Parameter matrix fusion), but this card asks: What is a common sign of overfitting?"
+        },
+        {
+          "id": "B",
+          "text": "Generalization to varied scenarios rather than memorization of narrow examples.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What is a common sign of overfitting?"
+        },
+        {
+          "id": "C",
+          "text": "Training loss falls while validation loss begins to rise.",
+          "explanation": "Correct: Training loss falls while validation loss begins to rise."
+        },
+        {
+          "id": "D",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What is a common sign of overfitting?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Training loss falls while validation loss begins to rise.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.1 Model training status and metrics"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is the purpose of early stopping?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Stop training when validation performance starts to deteriorate.",
+          "explanation": "Correct: Stop training when validation performance starts to deteriorate."
+        },
+        {
+          "id": "B",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What is the purpose of early stopping?"
+        },
+        {
+          "id": "C",
+          "text": "Training can converge very slowly and waste time and compute.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is the purpose of early stopping?"
+        },
+        {
+          "id": "D",
+          "text": "One complete pass through the training dataset.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is the purpose of early stopping?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Stop training when validation performance starts to deteriorate.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does LoRA rank control?",
+      "options": [
+        {
+          "id": "A",
+          "text": "How often training evaluates the model on validation data.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does LoRA rank control?"
+        },
+        {
+          "id": "B",
+          "text": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does LoRA rank control?"
+        },
+        {
+          "id": "C",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What does LoRA rank control?"
+        },
+        {
+          "id": "D",
+          "text": "The capacity of the low-rank parameter update and its trainable parameter count.",
+          "explanation": "Correct: The capacity of the low-rank parameter update and its trainable parameter count."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "The capacity of the low-rank parameter update and its trainable parameter count.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a risk of setting LoRA rank too high for a small dataset?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The size of each parameter update during optimization.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is a risk of setting LoRA rank too high for a small dataset?"
+        },
+        {
+          "id": "B",
+          "text": "Increased capacity can memorize examples and overfit.",
+          "explanation": "Correct: Increased capacity can memorize examples and overfit."
+        },
+        {
+          "id": "C",
+          "text": "Training loss falls while validation loss begins to rise.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What is a risk of setting LoRA rank too high for a small dataset?"
+        },
+        {
+          "id": "D",
+          "text": "How often training evaluates the model on validation data.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is a risk of setting LoRA rank too high for a small dataset?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Increased capacity can memorize examples and overfit.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does batch size control?",
+      "options": [
+        {
+          "id": "A",
+          "text": "How many training samples are processed together in an optimizer step.",
+          "explanation": "Correct: How many training samples are processed together in an optimizer step."
+        },
+        {
+          "id": "B",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What does batch size control?"
+        },
+        {
+          "id": "C",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does batch size control?"
+        },
+        {
+          "id": "D",
+          "text": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does batch size control?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "How many training samples are processed together in an optimizer step.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "How can gradient accumulation simulate a larger batch?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: How can gradient accumulation simulate a larger batch?"
+        },
+        {
+          "id": "B",
+          "text": "Updating model parameters from training examples and their loss.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: How can gradient accumulation simulate a larger batch?"
+        },
+        {
+          "id": "C",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "Correct: Accumulate gradients across small microbatches before updating parameters."
+        },
+        {
+          "id": "D",
+          "text": "Generalization to varied scenarios rather than memorization of narrow examples.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: How can gradient accumulation simulate a larger batch?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Accumulate gradients across small microbatches before updating parameters.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What happens when max_length is too small?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both training and validation loss continue to fall without adequate task performance.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What happens when max_length is too small?"
+        },
+        {
+          "id": "B",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What happens when max_length is too small?"
+        },
+        {
+          "id": "C",
+          "text": "Long training samples are truncated and the model misses part of their content.",
+          "explanation": "Correct: Long training samples are truncated and the model misses part of their content."
+        },
+        {
+          "id": "D",
+          "text": "When exporting a merged standalone model for inference without adapter-loading support.",
+          "explanation": "This is a related lesson concept (3.5 Parameter matrix fusion), but this card asks: What happens when max_length is too small?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Long training samples are truncated and the model misses part of their content.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What happens when max_length is much too large?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: What happens when max_length is much too large?"
+        },
+        {
+          "id": "B",
+          "text": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+          "explanation": "Correct: Samples consume extra GPU memory and may cause out-of-memory errors."
+        },
+        {
+          "id": "C",
+          "text": "Both training and validation loss continue to fall without adequate task performance.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What happens when max_length is much too large?"
+        },
+        {
+          "id": "D",
+          "text": "Current external knowledge from a business document or knowledge base.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What happens when max_length is much too large?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does eval_steps control?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: What does eval_steps control?"
+        },
+        {
+          "id": "B",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does eval_steps control?"
+        },
+        {
+          "id": "C",
+          "text": "Training can converge very slowly and waste time and compute.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does eval_steps control?"
+        },
+        {
+          "id": "D",
+          "text": "How often training evaluates the model on validation data.",
+          "explanation": "Correct: How often training evaluates the model on validation data."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "How often training evaluates the model on validation data.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.1.4 Key Hyperparameters in Model Training"
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why keep a separate test set?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It provides a final assessment after training and model selection are finished.",
+          "explanation": "Correct: It provides a final assessment after training and model selection are finished."
+        },
+        {
+          "id": "B",
+          "text": "The size of each parameter update during optimization.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Why keep a separate test set?"
+        },
+        {
+          "id": "C",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: Why keep a separate test set?"
+        },
+        {
+          "id": "D",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Why keep a separate test set?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "It provides a final assessment after training and model selection are finished.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.1 Model training status and metrics"
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does the validation set help a developer do?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Misleading examples teach the model incorrect patterns.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What does the validation set help a developer do?"
+        },
+        {
+          "id": "B",
+          "text": "It provides a final assessment after training and model selection are finished.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What does the validation set help a developer do?"
+        },
+        {
+          "id": "C",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What does the validation set help a developer do?"
+        },
+        {
+          "id": "D",
+          "text": "Monitor generalization during training and select useful checkpoints or settings.",
+          "explanation": "Correct: Monitor generalization during training and select useful checkpoints or settings."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Monitor generalization during training and select useful checkpoints or settings.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.1 Model training status and metrics"
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is the training set used for?",
+      "options": [
+        {
+          "id": "A",
+          "text": "As a product of smaller low-rank trainable matrices.",
+          "explanation": "This is a related lesson concept (2.2.2 LoRA Fine-tuning), but this card asks: What is the training set used for?"
+        },
+        {
+          "id": "B",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "This is a related lesson concept (2.1.3 Gradient descent algorithm - automatically determining the optimal solution), but this card asks: What is the training set used for?"
+        },
+        {
+          "id": "C",
+          "text": "Updating model parameters from training examples and their loss.",
+          "explanation": "Correct: Updating model parameters from training examples and their loss."
+        },
+        {
+          "id": "D",
+          "text": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is the training set used for?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Updating model parameters from training examples and their loss.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.1 Model training status and metrics"
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does LoRA keep frozen during adaptation?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Current external knowledge from a business document or knowledge base.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What does LoRA keep frozen during adaptation?"
+        },
+        {
+          "id": "B",
+          "text": "The original pretrained model weights.",
+          "explanation": "Correct: The original pretrained model weights."
+        },
+        {
+          "id": "C",
+          "text": "Monitor generalization during training and select useful checkpoints or settings.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What does LoRA keep frozen during adaptation?"
+        },
+        {
+          "id": "D",
+          "text": "It provides a final assessment after training and model selection are finished.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: What does LoRA keep frozen during adaptation?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The original pretrained model weights.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.2.2 LoRA Fine-tuning"
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "How does LoRA represent a weight update?",
+      "options": [
+        {
+          "id": "A",
+          "text": "As a product of smaller low-rank trainable matrices.",
+          "explanation": "Correct: As a product of smaller low-rank trainable matrices."
+        },
+        {
+          "id": "B",
+          "text": "Increased capacity can memorize examples and overfit.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: How does LoRA represent a weight update?"
+        },
+        {
+          "id": "C",
+          "text": "Both training and validation loss continue to fall without adequate task performance.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: How does LoRA represent a weight update?"
+        },
+        {
+          "id": "D",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "This is a related lesson concept (2.2.3 Effectiveness of LoRA Fine-tuning), but this card asks: How does LoRA represent a weight update?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "As a product of smaller low-rank trainable matrices.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.2.2 LoRA Fine-tuning"
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why is an adapter smaller than the full base model?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It stores only the low-rank update parameters rather than all base weights.",
+          "explanation": "Correct: It stores only the low-rank update parameters rather than all base weights."
+        },
+        {
+          "id": "B",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "This is a related lesson concept (2.1.3 Gradient descent algorithm - automatically determining the optimal solution), but this card asks: Why is an adapter smaller than the full base model?"
+        },
+        {
+          "id": "C",
+          "text": "The model’s error on a training sample or prediction.",
+          "explanation": "This is a related lesson concept (2.1.2 loss function & Cost function - quantifying model performance), but this card asks: Why is an adapter smaller than the full base model?"
+        },
+        {
+          "id": "D",
+          "text": "How often training evaluates the model on validation data.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Why is an adapter smaller than the full base model?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "It stores only the low-rank update parameters rather than all base weights.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "2.2.3 Effectiveness of LoRA Fine-tuning"
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a fine-tuning dataset’s diversity meant to improve?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is a fine-tuning dataset’s diversity meant to improve?"
+        },
+        {
+          "id": "B",
+          "text": "Generalization to varied scenarios rather than memorization of narrow examples.",
+          "explanation": "Correct: Generalization to varied scenarios rather than memorization of narrow examples."
+        },
+        {
+          "id": "C",
+          "text": "Current external knowledge from a business document or knowledge base.",
+          "explanation": "This is a related lesson concept (Fine-tuning dataset construction strategy), but this card asks: What is a fine-tuning dataset’s diversity meant to improve?"
+        },
+        {
+          "id": "D",
+          "text": "Samples consume extra GPU memory and may cause out-of-memory errors.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What is a fine-tuning dataset’s diversity meant to improve?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Generalization to varied scenarios rather than memorization of narrow examples.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "Fine-tuning dataset construction strategy"
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why remove noisy or incorrect training records?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Accumulate gradients across small microbatches before updating parameters.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Why remove noisy or incorrect training records?"
+        },
+        {
+          "id": "B",
+          "text": "Misleading examples teach the model incorrect patterns.",
+          "explanation": "Correct: Misleading examples teach the model incorrect patterns."
+        },
+        {
+          "id": "C",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Why remove noisy or incorrect training records?"
+        },
+        {
+          "id": "D",
+          "text": "The size of each parameter update during optimization.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: Why remove noisy or incorrect training records?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Misleading examples teach the model incorrect patterns.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "Fine-tuning dataset construction strategy"
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why balance categories in a classification dataset?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Both training and validation loss continue to fall without adequate task performance.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: Why balance categories in a classification dataset?"
+        },
+        {
+          "id": "B",
+          "text": "Training loss falls while validation loss begins to rise.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: Why balance categories in a classification dataset?"
+        },
+        {
+          "id": "C",
+          "text": "When exporting a merged standalone model for inference without adapter-loading support.",
+          "explanation": "This is a related lesson concept (3.5 Parameter matrix fusion), but this card asks: Why balance categories in a classification dataset?"
+        },
+        {
+          "id": "D",
+          "text": "To avoid biasing the model toward a dominant class.",
+          "explanation": "Correct: To avoid biasing the model toward a dominant class."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "To avoid biasing the model toward a dominant class.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "Fine-tuning dataset construction strategy"
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What can retrieval provide when there is too little labeled fine-tuning data?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Long training samples are truncated and the model misses part of their content.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What can retrieval provide when there is too little labeled fine-tuning data?"
+        },
+        {
+          "id": "B",
+          "text": "Current external knowledge from a business document or knowledge base.",
+          "explanation": "Correct: Current external knowledge from a business document or knowledge base."
+        },
+        {
+          "id": "C",
+          "text": "One complete pass through the training dataset.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: What can retrieval provide when there is too little labeled fine-tuning data?"
+        },
+        {
+          "id": "D",
+          "text": "Opposite the gradient, toward lower loss.",
+          "explanation": "This is a related lesson concept (2.1.3 Gradient descent algorithm - automatically determining the optimal solution), but this card asks: What can retrieval provide when there is too little labeled fine-tuning data?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Current external knowledge from a business document or knowledge base.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "Fine-tuning dataset construction strategy"
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "section": "finetuning",
+      "difficulty": "application",
+      "type": "single",
+      "question": "When is LoRA adapter fusion useful?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When exporting a merged standalone model for inference without adapter-loading support.",
+          "explanation": "Correct: When exporting a merged standalone model for inference without adapter-loading support."
+        },
+        {
+          "id": "B",
+          "text": "The capacity of the low-rank parameter update and its trainable parameter count.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: When is LoRA adapter fusion useful?"
+        },
+        {
+          "id": "C",
+          "text": "Updates can overshoot a minimum and make loss oscillate or rise.",
+          "explanation": "This is a related lesson concept (2.1.4 Key Hyperparameters in Model Training), but this card asks: When is LoRA adapter fusion useful?"
+        },
+        {
+          "id": "D",
+          "text": "Both training and validation loss continue to fall without adequate task performance.",
+          "explanation": "This is a related lesson concept (3.1 Model training status and metrics), but this card asks: When is LoRA adapter fusion useful?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "When exporting a merged standalone model for inference without adapter-loading support.",
+      "sources": [
+        {
+          "file": "2_7_Improve_Model_Accuracy_and_Efficiency_via_Fine_Tuning.ipynb",
+          "heading": "3.5 Parameter matrix fusion"
+        }
+      ]
+    }
+  ],
+  "section": {
+    "id": "finetuning",
+    "title": "LLM Fine-tuning",
+    "previousScore": 20,
+    "target": 40
+  }
+}

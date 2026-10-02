@@ -1,0 +1,1585 @@
+{
+  "version": 1,
+  "title": "Production Practices and AI Security",
+  "questions": [
+    {
+      "id": "Q33",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Using the lesson’s deployment comparison, a team needs full control over GPU drivers and unusual framework dependencies and is willing to manage the environment. Which option most directly matches?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A managed model API with a fixed provider environment.",
+          "explanation": "This reduces infrastructure work but does not supply the requested control over drivers and dependencies."
+        },
+        {
+          "id": "B",
+          "text": "A local vector database used as the inference server.",
+          "explanation": "A vector database stores and retrieves embeddings; it does not provide the required model runtime."
+        },
+        {
+          "id": "C",
+          "text": "An offline batch API with no configurable runtime.",
+          "explanation": "Its fixed runtime does not meet the stated customization requirement."
+        },
+        {
+          "id": "D",
+          "text": "Elastic GPU Service with a self-managed inference environment.",
+          "explanation": "The lesson associates this option with custom training or inference and full environment control."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Choose deployment by required control, workload, and the operations effort the team can support.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "multiple",
+      "question": "A production bot has long queues during traffic spikes and excessively verbose responses. Which measures directly address efficiency or reliability?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ask for concise answers and set a sensible output-token cap.",
+          "explanation": "Shorter outputs reduce generation work; the cap must allow a complete answer to avoid truncation."
+        },
+        {
+          "id": "B",
+          "text": "Scale serving capacity with demand and monitor latency and errors.",
+          "explanation": "Scaling addresses peak load, while monitoring shows whether service quality improves."
+        },
+        {
+          "id": "C",
+          "text": "Turn on streaming and assume total compute and queueing are solved.",
+          "explanation": "Streaming improves perceived responsiveness but does not remove the underlying work or capacity bottleneck."
+        },
+        {
+          "id": "D",
+          "text": "Reuse eligible shared-prefix computations through context caching.",
+          "explanation": "The lesson describes context caching as reducing redundant computation across overlapping inputs."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "takeaway": "Combine reduced generation work with capacity management and measurements.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1 System Performance Optimization"
+        },
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "4. Stability enhancement"
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "An employee asks the bot to role-play a director and reveal restricted expense policies. What is the strongest control for preventing retrieval of unauthorized documents?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tell the model to remember that some employees have limited permissions.",
+          "explanation": "A prompt alone is not an enforced permission boundary."
+        },
+        {
+          "id": "B",
+          "text": "Enforce the authenticated user’s document permissions in the retrieval path.",
+          "explanation": "The lesson requires users to retrieve only knowledge within their permission scope."
+        },
+        {
+          "id": "C",
+          "text": "Retrieve every document and rely on the employee to ignore sensitive passages.",
+          "explanation": "This exposes information outside the user’s permitted scope."
+        },
+        {
+          "id": "D",
+          "text": "Lower temperature so that confidential output is deterministic.",
+          "explanation": "Sampling settings do not implement access control."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Enforce knowledge permissions before unauthorized content can reach the model’s context.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.4.2 Advanced RAG protection"
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "section": "production",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "A tool-using agent is exposed to malicious prompts and may leak data in its replies. Which measures align with the lesson’s layered application defense?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Filter suspicious input before processing it.",
+          "explanation": "Input filtering is one layer, although it should not be the sole control."
+        },
+        {
+          "id": "B",
+          "text": "Treat a clean keyword-blacklist result as proof that every requested operation is safe.",
+          "explanation": "The lesson shows that synonyms and obfuscation bypass simple keyword filters."
+        },
+        {
+          "id": "C",
+          "text": "Monitor and audit the agent’s tool operations.",
+          "explanation": "Operation monitoring adds visibility into risky behavior beyond the input text."
+        },
+        {
+          "id": "D",
+          "text": "Review generated output for unsafe content or data leakage.",
+          "explanation": "Output review provides a final layer against unsafe responses."
+        }
+      ],
+      "correct": [
+        "A",
+        "C",
+        "D"
+      ],
+      "takeaway": "Input checks, operation monitoring, and output review cover different failure points.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.4.1 Real-time three-layer defense"
+        },
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "1.3 Initial defensive measures"
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What should a deployment decision account for besides model quality?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Unauthorized source text should not enter the model’s context in the first place.",
+          "explanation": "This is a related lesson concept (4.4.2 Advanced RAG protection), but this card asks: What should a deployment decision account for besides model quality?"
+        },
+        {
+          "id": "B",
+          "text": "Business needs, model characteristics, team skills, operational complexity, and cost.",
+          "explanation": "Correct: Business needs, model characteristics, team skills, operational complexity, and cost."
+        },
+        {
+          "id": "C",
+          "text": "Identify applicable market regulations and required registration or governance steps.",
+          "explanation": "This is a related lesson concept (4.5 Compliance and registration), but this card asks: What should a deployment decision account for besides model quality?"
+        },
+        {
+          "id": "D",
+          "text": "The model’s instructions so it reveals or produces something unauthorized.",
+          "explanation": "This is a related lesson concept (1.1 Prompt injection attacks), but this card asks: What should a deployment decision account for besides model quality?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Business needs, model characteristics, team skills, operational complexity, and cost.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Which Alibaba Cloud option is intended for quick managed access to Tongyi models?",
+      "options": [
+        {
+          "id": "A",
+          "text": "An agent may perform unsafe or unauthorized actions through its available tools.",
+          "explanation": "This is a related lesson concept (3.2.3 Inducing an agent to perform high-risk operations), but this card asks: Which Alibaba Cloud option is intended for quick managed access to Tongyi models?"
+        },
+        {
+          "id": "B",
+          "text": "Model Studio.",
+          "explanation": "Correct: Model Studio."
+        },
+        {
+          "id": "C",
+          "text": "An attack that tries to expose hidden system instructions or sensitive prompt content.",
+          "explanation": "This is a related lesson concept (3.2.1 Tricking LLM services into outputting risky content), but this card asks: Which Alibaba Cloud option is intended for quick managed access to Tongyi models?"
+        },
+        {
+          "id": "D",
+          "text": "It suits variable, lightweight requests but must be evaluated for sustained workloads.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: Which Alibaba Cloud option is intended for quick managed access to Tongyi models?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Model Studio.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Which service fits lightweight, low-frequency, event-triggered inference?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: Which service fits lightweight, low-frequency, event-triggered inference?"
+        },
+        {
+          "id": "B",
+          "text": "Offline workloads that can combine requests instead of needing immediate responses.",
+          "explanation": "This is a related lesson concept (2.1.2 Reducing Request Volume and Computation), but this card asks: Which service fits lightweight, low-frequency, event-triggered inference?"
+        },
+        {
+          "id": "C",
+          "text": "Operational anomalies such as sudden error spikes or unusual latency.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: Which service fits lightweight, low-frequency, event-triggered inference?"
+        },
+        {
+          "id": "D",
+          "text": "Function Compute, with serverless execution and request-based billing.",
+          "explanation": "Correct: Function Compute, with serverless execution and request-based billing."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Function Compute, with serverless execution and request-based billing.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Which service offers managed online model serving with elastic scaling?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Elastic GPU Service, with the team managing its runtime environment.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: Which service offers managed online model serving with elastic scaling?"
+        },
+        {
+          "id": "B",
+          "text": "PAI-EAS.",
+          "explanation": "Correct: PAI-EAS."
+        },
+        {
+          "id": "C",
+          "text": "Input filtering, operation monitoring, and output review.",
+          "explanation": "This is a related lesson concept (4.4.1 Real-time three-layer defense), but this card asks: Which service offers managed online model serving with elastic scaling?"
+        },
+        {
+          "id": "D",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: Which service offers managed online model serving with elastic scaling?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "PAI-EAS.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Which option gives teams more control over custom GPU environments?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: Which option gives teams more control over custom GPU environments?"
+        },
+        {
+          "id": "B",
+          "text": "Repeated computation on shared input prefixes across requests.",
+          "explanation": "This is a related lesson concept (2.1.2 Reducing Request Volume and Computation), but this card asks: Which option gives teams more control over custom GPU environments?"
+        },
+        {
+          "id": "C",
+          "text": "Elastic GPU Service, with the team managing its runtime environment.",
+          "explanation": "Correct: Elastic GPU Service, with the team managing its runtime environment."
+        },
+        {
+          "id": "D",
+          "text": "Model Studio.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: Which option gives teams more control over custom GPU environments?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Elastic GPU Service, with the team managing its runtime environment.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What kind of workload can justify a Kubernetes container service?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A complex microservice or distributed workload that needs cluster orchestration.",
+          "explanation": "Correct: A complex microservice or distributed workload that needs cluster orchestration."
+        },
+        {
+          "id": "B",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What kind of workload can justify a Kubernetes container service?"
+        },
+        {
+          "id": "C",
+          "text": "It suits variable, lightweight requests but must be evaluated for sustained workloads.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What kind of workload can justify a Kubernetes container service?"
+        },
+        {
+          "id": "D",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What kind of workload can justify a Kubernetes container service?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "A complex microservice or distributed workload that needs cluster orchestration.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does context caching reduce?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Repeated computation on shared input prefixes across requests.",
+          "explanation": "Correct: Repeated computation on shared input prefixes across requests."
+        },
+        {
+          "id": "B",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "This is a related lesson concept (2.2.4 Error handling and feedback), but this card asks: What does context caching reduce?"
+        },
+        {
+          "id": "C",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: What does context caching reduce?"
+        },
+        {
+          "id": "D",
+          "text": "Elastic GPU Service, with the team managing its runtime environment.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What does context caching reduce?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Repeated computation on shared input prefixes across requests.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.2 Reducing Request Volume and Computation"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "section": "production",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "When is batch inference useful?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Offline workloads that can combine requests instead of needing immediate responses.",
+          "explanation": "Correct: Offline workloads that can combine requests instead of needing immediate responses."
+        },
+        {
+          "id": "B",
+          "text": "Model Studio.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: When is batch inference useful?"
+        },
+        {
+          "id": "C",
+          "text": "A complex microservice or distributed workload that needs cluster orchestration.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: When is batch inference useful?"
+        },
+        {
+          "id": "D",
+          "text": "Throughput or latency when independent work can safely run concurrently.",
+          "explanation": "This is a related lesson concept (2.1.4 Parallel Processing), but this card asks: When is batch inference useful?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Offline workloads that can combine requests instead of needing immediate responses.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.2 Reducing Request Volume and Computation"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "How can reducing input tokens improve LLM service performance?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "Correct: It reduces inference work by removing redundant or irrelevant context."
+        },
+        {
+          "id": "B",
+          "text": "Function Compute, with serverless execution and request-based billing.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: How can reducing input tokens improve LLM service performance?"
+        },
+        {
+          "id": "C",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "This is a related lesson concept (2.2.4 Error handling and feedback), but this card asks: How can reducing input tokens improve LLM service performance?"
+        },
+        {
+          "id": "D",
+          "text": "It suits variable, lightweight requests but must be evaluated for sustained workloads.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: How can reducing input tokens improve LLM service performance?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "It reduces inference work by removing redundant or irrelevant context.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.3 Reducing Token Input and Output"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What risk comes from setting max_tokens too low?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Model Studio.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What risk comes from setting max_tokens too low?"
+        },
+        {
+          "id": "B",
+          "text": "Enforce permissions and validate actions before execution, then monitor them.",
+          "explanation": "This is a related lesson concept (4.4.1 Real-time three-layer defense), but this card asks: What risk comes from setting max_tokens too low?"
+        },
+        {
+          "id": "C",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "Correct: The API can cut off an answer before it is semantically complete."
+        },
+        {
+          "id": "D",
+          "text": "Function Compute, with serverless execution and request-based billing.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What risk comes from setting max_tokens too low?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "The API can cut off an answer before it is semantically complete.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.3 Reducing Token Input and Output"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a benefit of concise output instructions compared with a hard token cap?",
+      "options": [
+        {
+          "id": "A",
+          "text": "They encourage brevity without necessarily cutting off mid-sentence.",
+          "explanation": "Correct: They encourage brevity without necessarily cutting off mid-sentence."
+        },
+        {
+          "id": "B",
+          "text": "It can make a RAG system retrieve false or malicious claims as if they were trusted evidence.",
+          "explanation": "This is a related lesson concept (3.2.2 Tricking intelligent applications into outputting risky content), but this card asks: What is a benefit of concise output instructions compared with a hard token cap?"
+        },
+        {
+          "id": "C",
+          "text": "Repeated computation on shared input prefixes across requests.",
+          "explanation": "This is a related lesson concept (2.1.2 Reducing Request Volume and Computation), but this card asks: What is a benefit of concise output instructions compared with a hard token cap?"
+        },
+        {
+          "id": "D",
+          "text": "To verify that fallback procedures work before a real failure occurs.",
+          "explanation": "This is a related lesson concept (4.3 Disaster recovery), but this card asks: What is a benefit of concise output instructions compared with a hard token cap?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "They encourage brevity without necessarily cutting off mid-sentence.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.3 Reducing Token Input and Output"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What can parallel processing improve?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What can parallel processing improve?"
+        },
+        {
+          "id": "B",
+          "text": "Business needs, model characteristics, team skills, operational complexity, and cost.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What can parallel processing improve?"
+        },
+        {
+          "id": "C",
+          "text": "Risky input or generated content against the application’s safety rules.",
+          "explanation": "This is a related lesson concept (2.2 Content moderation text), but this card asks: What can parallel processing improve?"
+        },
+        {
+          "id": "D",
+          "text": "Throughput or latency when independent work can safely run concurrently.",
+          "explanation": "Correct: Throughput or latency when independent work can safely run concurrently."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Throughput or latency when independent work can safely run concurrently.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.4 Parallel Processing"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a key user-experience benefit of streaming?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It can make a RAG system retrieve false or malicious claims as if they were trusted evidence.",
+          "explanation": "This is a related lesson concept (3.2.2 Tricking intelligent applications into outputting risky content), but this card asks: What is a key user-experience benefit of streaming?"
+        },
+        {
+          "id": "B",
+          "text": "Unauthorized source text should not enter the model’s context in the first place.",
+          "explanation": "This is a related lesson concept (4.4.2 Advanced RAG protection), but this card asks: What is a key user-experience benefit of streaming?"
+        },
+        {
+          "id": "C",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "This is a related lesson concept (2.2.4 Error handling and feedback), but this card asks: What is a key user-experience benefit of streaming?"
+        },
+        {
+          "id": "D",
+          "text": "Users see output sooner even if total generation time is unchanged.",
+          "explanation": "Correct: Users see output sooner even if total generation time is unchanged."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Users see output sooner even if total generation time is unchanged.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.2.1 Streaming output"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why show progress for long-running tasks?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Users can understand that work is continuing and what stage it has reached.",
+          "explanation": "Correct: Users can understand that work is continuing and what stage it has reached."
+        },
+        {
+          "id": "B",
+          "text": "Unauthorized source text should not enter the model’s context in the first place.",
+          "explanation": "This is a related lesson concept (4.4.2 Advanced RAG protection), but this card asks: Why show progress for long-running tasks?"
+        },
+        {
+          "id": "C",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "This is a related lesson concept (2.2.4 Error handling and feedback), but this card asks: Why show progress for long-running tasks?"
+        },
+        {
+          "id": "D",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: Why show progress for long-running tasks?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Users can understand that work is continuing and what stage it has reached.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.2.3 Display task progress"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What should useful error feedback tell an affected user?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A backup model in another zone, a smaller fallback, or an offline knowledge cache.",
+          "explanation": "This is a related lesson concept (4.3 Disaster recovery), but this card asks: What should useful error feedback tell an affected user?"
+        },
+        {
+          "id": "B",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What should useful error feedback tell an affected user?"
+        },
+        {
+          "id": "C",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "Correct: What failed and an actionable next step, without exposing sensitive implementation details."
+        },
+        {
+          "id": "D",
+          "text": "Function Compute, with serverless execution and request-based billing.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What should useful error feedback tell an affected user?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "What failed and an actionable next step, without exposing sensitive implementation details.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.2.4 Error handling and feedback"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is automated scaling intended to do?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Unauthorized source text should not enter the model’s context in the first place.",
+          "explanation": "This is a related lesson concept (4.4.2 Advanced RAG protection), but this card asks: What is automated scaling intended to do?"
+        },
+        {
+          "id": "B",
+          "text": "Add capacity during peaks and reduce it during quiet periods.",
+          "explanation": "Correct: Add capacity during peaks and reduce it during quiet periods."
+        },
+        {
+          "id": "C",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What is automated scaling intended to do?"
+        },
+        {
+          "id": "D",
+          "text": "Operational anomalies such as sudden error spikes or unusual latency.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: What is automated scaling intended to do?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Add capacity during peaks and reduce it during quiet periods.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "4.1 Automated scaling"
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Which service measures help monitor model serving stability?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Operational anomalies such as sudden error spikes or unusual latency.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: Which service measures help monitor model serving stability?"
+        },
+        {
+          "id": "B",
+          "text": "Latency, error rate, GPU utilization, and token consumption.",
+          "explanation": "Correct: Latency, error rate, GPU utilization, and token consumption."
+        },
+        {
+          "id": "C",
+          "text": "It offers custom control but requires the team to manage more infrastructure.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: Which service measures help monitor model serving stability?"
+        },
+        {
+          "id": "D",
+          "text": "A backup model in another zone, a smaller fallback, or an offline knowledge cache.",
+          "explanation": "This is a related lesson concept (4.3 Disaster recovery), but this card asks: Which service measures help monitor model serving stability?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Latency, error rate, GPU utilization, and token consumption.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "4.2 Real-time monitoring"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is one disaster-recovery fallback the lesson suggests?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Add capacity during peaks and reduce it during quiet periods.",
+          "explanation": "This is a related lesson concept (4.1 Automated scaling), but this card asks: What is one disaster-recovery fallback the lesson suggests?"
+        },
+        {
+          "id": "B",
+          "text": "Identify applicable market regulations and required registration or governance steps.",
+          "explanation": "This is a related lesson concept (4.5 Compliance and registration), but this card asks: What is one disaster-recovery fallback the lesson suggests?"
+        },
+        {
+          "id": "C",
+          "text": "A backup model in another zone, a smaller fallback, or an offline knowledge cache.",
+          "explanation": "Correct: A backup model in another zone, a smaller fallback, or an offline knowledge cache."
+        },
+        {
+          "id": "D",
+          "text": "A denial-of-service attempt that consumes capacity and disrupts service.",
+          "explanation": "This is a related lesson concept (3.3.1 DDoS Attack to paralyze your AI service), but this card asks: What is one disaster-recovery fallback the lesson suggests?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "A backup model in another zone, a smaller fallback, or an offline knowledge cache.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "4.3 Disaster recovery"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does prompt injection attempt to manipulate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Elastic GPU Service, with the team managing its runtime environment.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What does prompt injection attempt to manipulate?"
+        },
+        {
+          "id": "B",
+          "text": "The model’s instructions so it reveals or produces something unauthorized.",
+          "explanation": "Correct: The model’s instructions so it reveals or produces something unauthorized."
+        },
+        {
+          "id": "C",
+          "text": "Users can understand that work is continuing and what stage it has reached.",
+          "explanation": "This is a related lesson concept (2.2.3 Display task progress), but this card asks: What does prompt injection attempt to manipulate?"
+        },
+        {
+          "id": "D",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: What does prompt injection attempt to manipulate?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The model’s instructions so it reveals or produces something unauthorized.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "1.1 Prompt injection attacks"
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What makes command injection dangerous for a tool-using agent?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What makes command injection dangerous for a tool-using agent?"
+        },
+        {
+          "id": "B",
+          "text": "Add capacity during peaks and reduce it during quiet periods.",
+          "explanation": "This is a related lesson concept (4.1 Automated scaling), but this card asks: What makes command injection dangerous for a tool-using agent?"
+        },
+        {
+          "id": "C",
+          "text": "A malicious command can turn an allowed tool path into an unauthorized operation.",
+          "explanation": "Correct: A malicious command can turn an allowed tool path into an unauthorized operation."
+        },
+        {
+          "id": "D",
+          "text": "Users see output sooner even if total generation time is unchanged.",
+          "explanation": "This is a related lesson concept (2.2.1 Streaming output), but this card asks: What makes command injection dangerous for a tool-using agent?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "A malicious command can turn an allowed tool path into an unauthorized operation.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "1.2 Command injection attacks (Agent behavior attacks)"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why is a keyword blacklist insufficient as the only security layer?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It can make a RAG system retrieve false or malicious claims as if they were trusted evidence.",
+          "explanation": "This is a related lesson concept (3.2.2 Tricking intelligent applications into outputting risky content), but this card asks: Why is a keyword blacklist insufficient as the only security layer?"
+        },
+        {
+          "id": "B",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "Correct: Synonyms, obfuscation, and encoding can bypass fixed word lists."
+        },
+        {
+          "id": "C",
+          "text": "PAI-EAS.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: Why is a keyword blacklist insufficient as the only security layer?"
+        },
+        {
+          "id": "D",
+          "text": "Add capacity during peaks and reduce it during quiet periods.",
+          "explanation": "This is a related lesson concept (4.1 Automated scaling), but this card asks: Why is a keyword blacklist insufficient as the only security layer?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "1.3 Initial defensive measures"
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What are the lesson’s three real-time application-defense layers?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Users see output sooner even if total generation time is unchanged.",
+          "explanation": "This is a related lesson concept (2.2.1 Streaming output), but this card asks: What are the lesson’s three real-time application-defense layers?"
+        },
+        {
+          "id": "B",
+          "text": "Repeated computation on shared input prefixes across requests.",
+          "explanation": "This is a related lesson concept (2.1.2 Reducing Request Volume and Computation), but this card asks: What are the lesson’s three real-time application-defense layers?"
+        },
+        {
+          "id": "C",
+          "text": "Increase token generation time and cost.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What are the lesson’s three real-time application-defense layers?"
+        },
+        {
+          "id": "D",
+          "text": "Input filtering, operation monitoring, and output review.",
+          "explanation": "Correct: Input filtering, operation monitoring, and output review."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Input filtering, operation monitoring, and output review.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.4.1 Real-time three-layer defense"
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is the first RAG access-control defense?",
+      "options": [
+        {
+          "id": "A",
+          "text": "They encourage brevity without necessarily cutting off mid-sentence.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What is the first RAG access-control defense?"
+        },
+        {
+          "id": "B",
+          "text": "Users see output sooner even if total generation time is unchanged.",
+          "explanation": "This is a related lesson concept (2.2.1 Streaming output), but this card asks: What is the first RAG access-control defense?"
+        },
+        {
+          "id": "C",
+          "text": "Restrict retrieval to knowledge within the authenticated user’s permission scope.",
+          "explanation": "Correct: Restrict retrieval to knowledge within the authenticated user’s permission scope."
+        },
+        {
+          "id": "D",
+          "text": "Function Compute, with serverless execution and request-based billing.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What is the first RAG access-control defense?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Restrict retrieval to knowledge within the authenticated user’s permission scope.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.4.2 Advanced RAG protection"
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why enforce access control in retrieval rather than relying only on a prompt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Unauthorized source text should not enter the model’s context in the first place.",
+          "explanation": "Correct: Unauthorized source text should not enter the model’s context in the first place."
+        },
+        {
+          "id": "B",
+          "text": "Users can understand that work is continuing and what stage it has reached.",
+          "explanation": "This is a related lesson concept (2.2.3 Display task progress), but this card asks: Why enforce access control in retrieval rather than relying only on a prompt?"
+        },
+        {
+          "id": "C",
+          "text": "A backup model in another zone, a smaller fallback, or an offline knowledge cache.",
+          "explanation": "This is a related lesson concept (4.3 Disaster recovery), but this card asks: Why enforce access control in retrieval rather than relying only on a prompt?"
+        },
+        {
+          "id": "D",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: Why enforce access control in retrieval rather than relying only on a prompt?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Unauthorized source text should not enter the model’s context in the first place.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.4.2 Advanced RAG protection"
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is content moderation intended to inspect?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Risky input or generated content against the application’s safety rules.",
+          "explanation": "Correct: Risky input or generated content against the application’s safety rules."
+        },
+        {
+          "id": "B",
+          "text": "Latency, error rate, GPU utilization, and token consumption.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: What is content moderation intended to inspect?"
+        },
+        {
+          "id": "C",
+          "text": "It suits variable, lightweight requests but must be evaluated for sustained workloads.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What is content moderation intended to inspect?"
+        },
+        {
+          "id": "D",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: What is content moderation intended to inspect?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Risky input or generated content against the application’s safety rules.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "2.2 Content moderation text"
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What kind of risk can poisoned knowledge-base content cause?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It can make a RAG system retrieve false or malicious claims as if they were trusted evidence.",
+          "explanation": "Correct: It can make a RAG system retrieve false or malicious claims as if they were trusted evidence."
+        },
+        {
+          "id": "B",
+          "text": "Enforce permissions and validate actions before execution, then monitor them.",
+          "explanation": "This is a related lesson concept (4.4.1 Real-time three-layer defense), but this card asks: What kind of risk can poisoned knowledge-base content cause?"
+        },
+        {
+          "id": "C",
+          "text": "Input filtering, operation monitoring, and output review.",
+          "explanation": "This is a related lesson concept (4.4.1 Real-time three-layer defense), but this card asks: What kind of risk can poisoned knowledge-base content cause?"
+        },
+        {
+          "id": "D",
+          "text": "A denial-of-service attempt that consumes capacity and disrupts service.",
+          "explanation": "This is a related lesson concept (3.3.1 DDoS Attack to paralyze your AI service), but this card asks: What kind of risk can poisoned knowledge-base content cause?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "It can make a RAG system retrieve false or malicious claims as if they were trusted evidence.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "3.2.2 Tricking intelligent applications into outputting risky content"
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a prompt leak?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What is a prompt leak?"
+        },
+        {
+          "id": "B",
+          "text": "An attack that tries to expose hidden system instructions or sensitive prompt content.",
+          "explanation": "Correct: An attack that tries to expose hidden system instructions or sensitive prompt content."
+        },
+        {
+          "id": "C",
+          "text": "It offers custom control but requires the team to manage more infrastructure.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What is a prompt leak?"
+        },
+        {
+          "id": "D",
+          "text": "Add capacity during peaks and reduce it during quiet periods.",
+          "explanation": "This is a related lesson concept (4.1 Automated scaling), but this card asks: What is a prompt leak?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "An attack that tries to expose hidden system instructions or sensitive prompt content.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "3.2.1 Tricking LLM services into outputting risky content"
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "section": "production",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What risk does malicious tool use create?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Elastic GPU Service, with the team managing its runtime environment.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What risk does malicious tool use create?"
+        },
+        {
+          "id": "B",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What risk does malicious tool use create?"
+        },
+        {
+          "id": "C",
+          "text": "An agent may perform unsafe or unauthorized actions through its available tools.",
+          "explanation": "Correct: An agent may perform unsafe or unauthorized actions through its available tools."
+        },
+        {
+          "id": "D",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: What risk does malicious tool use create?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "An agent may perform unsafe or unauthorized actions through its available tools.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "3.2.3 Inducing an agent to perform high-risk operations"
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "How can an application reduce risk from agent tool calls?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Operational anomalies such as sudden error spikes or unusual latency.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: How can an application reduce risk from agent tool calls?"
+        },
+        {
+          "id": "B",
+          "text": "It reduces inference work by removing redundant or irrelevant context.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: How can an application reduce risk from agent tool calls?"
+        },
+        {
+          "id": "C",
+          "text": "Add capacity during peaks and reduce it during quiet periods.",
+          "explanation": "This is a related lesson concept (4.1 Automated scaling), but this card asks: How can an application reduce risk from agent tool calls?"
+        },
+        {
+          "id": "D",
+          "text": "Enforce permissions and validate actions before execution, then monitor them.",
+          "explanation": "Correct: Enforce permissions and validate actions before execution, then monitor them."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Enforce permissions and validate actions before execution, then monitor them.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.4.1 Real-time three-layer defense"
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What kind of failure is a resource-exhaustion attack against an LLM service?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Restrict retrieval to knowledge within the authenticated user’s permission scope.",
+          "explanation": "This is a related lesson concept (4.4.2 Advanced RAG protection), but this card asks: What kind of failure is a resource-exhaustion attack against an LLM service?"
+        },
+        {
+          "id": "B",
+          "text": "Risky input or generated content against the application’s safety rules.",
+          "explanation": "This is a related lesson concept (2.2 Content moderation text), but this card asks: What kind of failure is a resource-exhaustion attack against an LLM service?"
+        },
+        {
+          "id": "C",
+          "text": "A denial-of-service attempt that consumes capacity and disrupts service.",
+          "explanation": "Correct: A denial-of-service attempt that consumes capacity and disrupts service."
+        },
+        {
+          "id": "D",
+          "text": "Latency, error rate, GPU utilization, and token consumption.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: What kind of failure is a resource-exhaustion attack against an LLM service?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "A denial-of-service attempt that consumes capacity and disrupts service.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "3.3.1 DDoS Attack to paralyze your AI service"
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What should monitoring alerts detect?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Risky input or generated content against the application’s safety rules.",
+          "explanation": "This is a related lesson concept (2.2 Content moderation text), but this card asks: What should monitoring alerts detect?"
+        },
+        {
+          "id": "B",
+          "text": "It offers custom control but requires the team to manage more infrastructure.",
+          "explanation": "This is a related lesson concept (3.4 Cloud service solution comparison and decision recommendations), but this card asks: What should monitoring alerts detect?"
+        },
+        {
+          "id": "C",
+          "text": "Operational anomalies such as sudden error spikes or unusual latency.",
+          "explanation": "Correct: Operational anomalies such as sudden error spikes or unusual latency."
+        },
+        {
+          "id": "D",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "This is a related lesson concept (2.2.4 Error handling and feedback), but this card asks: What should monitoring alerts detect?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Operational anomalies such as sudden error spikes or unusual latency.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "4.2 Real-time monitoring"
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What trade-off comes with Function Compute billing?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Risky input or generated content against the application’s safety rules.",
+          "explanation": "This is a related lesson concept (2.2 Content moderation text), but this card asks: What trade-off comes with Function Compute billing?"
+        },
+        {
+          "id": "B",
+          "text": "A malicious command can turn an allowed tool path into an unauthorized operation.",
+          "explanation": "This is a related lesson concept (1.2 Command injection attacks (Agent behavior attacks)), but this card asks: What trade-off comes with Function Compute billing?"
+        },
+        {
+          "id": "C",
+          "text": "It suits variable, lightweight requests but must be evaluated for sustained workloads.",
+          "explanation": "Correct: It suits variable, lightweight requests but must be evaluated for sustained workloads."
+        },
+        {
+          "id": "D",
+          "text": "Users can understand that work is continuing and what stage it has reached.",
+          "explanation": "This is a related lesson concept (2.2.3 Display task progress), but this card asks: What trade-off comes with Function Compute billing?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "It suits variable, lightweight requests but must be evaluated for sustained workloads.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What operational trade-off comes with Elastic GPU Service?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model’s instructions so it reveals or produces something unauthorized.",
+          "explanation": "This is a related lesson concept (1.1 Prompt injection attacks), but this card asks: What operational trade-off comes with Elastic GPU Service?"
+        },
+        {
+          "id": "B",
+          "text": "Synonyms, obfuscation, and encoding can bypass fixed word lists.",
+          "explanation": "This is a related lesson concept (1.3 Initial defensive measures), but this card asks: What operational trade-off comes with Elastic GPU Service?"
+        },
+        {
+          "id": "C",
+          "text": "It offers custom control but requires the team to manage more infrastructure.",
+          "explanation": "Correct: It offers custom control but requires the team to manage more infrastructure."
+        },
+        {
+          "id": "D",
+          "text": "Identify applicable market regulations and required registration or governance steps.",
+          "explanation": "This is a related lesson concept (4.5 Compliance and registration), but this card asks: What operational trade-off comes with Elastic GPU Service?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "It offers custom control but requires the team to manage more infrastructure.",
+      "sources": [
+        {
+          "file": "2_8_Deploy_Model.ipynb",
+          "heading": "3.4 Cloud service solution comparison and decision recommendations"
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What can redundant output text do to a production system?",
+      "options": [
+        {
+          "id": "A",
+          "text": "What failed and an actionable next step, without exposing sensitive implementation details.",
+          "explanation": "This is a related lesson concept (2.2.4 Error handling and feedback), but this card asks: What can redundant output text do to a production system?"
+        },
+        {
+          "id": "B",
+          "text": "The API can cut off an answer before it is semantically complete.",
+          "explanation": "This is a related lesson concept (2.1.3 Reducing Token Input and Output), but this card asks: What can redundant output text do to a production system?"
+        },
+        {
+          "id": "C",
+          "text": "Users see output sooner even if total generation time is unchanged.",
+          "explanation": "This is a related lesson concept (2.2.1 Streaming output), but this card asks: What can redundant output text do to a production system?"
+        },
+        {
+          "id": "D",
+          "text": "Increase token generation time and cost.",
+          "explanation": "Correct: Increase token generation time and cost."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Increase token generation time and cost.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "2.1.3 Reducing Token Input and Output"
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "Why test disaster-recovery plans with simulated outages?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To verify that fallback procedures work before a real failure occurs.",
+          "explanation": "Correct: To verify that fallback procedures work before a real failure occurs."
+        },
+        {
+          "id": "B",
+          "text": "Identify applicable market regulations and required registration or governance steps.",
+          "explanation": "This is a related lesson concept (4.5 Compliance and registration), but this card asks: Why test disaster-recovery plans with simulated outages?"
+        },
+        {
+          "id": "C",
+          "text": "Input filtering, operation monitoring, and output review.",
+          "explanation": "This is a related lesson concept (4.4.1 Real-time three-layer defense), but this card asks: Why test disaster-recovery plans with simulated outages?"
+        },
+        {
+          "id": "D",
+          "text": "The model’s instructions so it reveals or produces something unauthorized.",
+          "explanation": "This is a related lesson concept (1.1 Prompt injection attacks), but this card asks: Why test disaster-recovery plans with simulated outages?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "To verify that fallback procedures work before a real failure occurs.",
+      "sources": [
+        {
+          "file": "2_9_Practical_Production_of_LLM_Applications.ipynb",
+          "heading": "4.3 Disaster recovery"
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "section": "production",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What compliance work should happen before launch?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It can make a RAG system retrieve false or malicious claims as if they were trusted evidence.",
+          "explanation": "This is a related lesson concept (3.2.2 Tricking intelligent applications into outputting risky content), but this card asks: What compliance work should happen before launch?"
+        },
+        {
+          "id": "B",
+          "text": "Latency, error rate, GPU utilization, and token consumption.",
+          "explanation": "This is a related lesson concept (4.2 Real-time monitoring), but this card asks: What compliance work should happen before launch?"
+        },
+        {
+          "id": "C",
+          "text": "Identify applicable market regulations and required registration or governance steps.",
+          "explanation": "Correct: Identify applicable market regulations and required registration or governance steps."
+        },
+        {
+          "id": "D",
+          "text": "Throughput or latency when independent work can safely run concurrently.",
+          "explanation": "This is a related lesson concept (2.1.4 Parallel Processing), but this card asks: What compliance work should happen before launch?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Identify applicable market regulations and required registration or governance steps.",
+      "sources": [
+        {
+          "file": "2_A_LLM_Application_Security_and_Compliance.ipynb",
+          "heading": "4.5 Compliance and registration"
+        }
+      ]
+    }
+  ],
+  "section": {
+    "id": "production",
+    "title": "Production Practices and AI Security",
+    "previousScore": null,
+    "previousScoreNote": "Entered as “709”; unconfirmed.",
+    "target": 40
+  }
+}

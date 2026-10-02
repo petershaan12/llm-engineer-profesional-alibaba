@@ -1,0 +1,1589 @@
+{
+  "version": 1,
+  "title": "Prompt Engineering",
+  "questions": [
+    {
+      "id": "Q05",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "multiple",
+      "question": "Which prompt elements distinguish what the model should do from the information it should use?",
+      "options": [
+        {
+          "id": "A",
+          "text": "An instruction that states the task.",
+          "explanation": "Instructions specify the operation or goal."
+        },
+        {
+          "id": "B",
+          "text": "A temperature value used as the task description.",
+          "explanation": "Temperature changes sampling behavior; it does not describe the task."
+        },
+        {
+          "id": "C",
+          "text": "Context that supplies relevant background or reference material.",
+          "explanation": "Context gives information needed to carry out the task."
+        },
+        {
+          "id": "D",
+          "text": "A longer response limit used as a replacement for requirements.",
+          "explanation": "An output budget does not explain what the answer must contain."
+        }
+      ],
+      "correct": [
+        "A",
+        "C"
+      ],
+      "takeaway": "State the task explicitly and supply the context needed to perform it.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "3.1 Basic elements"
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "A prompt mixes employee policy text with instructions in one paragraph. The bot sometimes treats policy text as part of the task. Which revision best clarifies the structure?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Repeat the entire paragraph several times.",
+          "explanation": "Repetition increases length without distinguishing task and reference material."
+        },
+        {
+          "id": "B",
+          "text": "Place reference text inside clear delimiters and state the task separately.",
+          "explanation": "The lesson uses delimiters to distinguish content to process from instructions."
+        },
+        {
+          "id": "C",
+          "text": "Remove the policy text and ask the model to recall it.",
+          "explanation": "Removing required private knowledge sacrifices the evidence needed for the answer."
+        },
+        {
+          "id": "D",
+          "text": "Increase the maximum output length.",
+          "explanation": "Output length does not repair the prompt’s structural ambiguity."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Use clear boundaries between instructions, reference context, and the user’s question.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.1 Clearly express requirements and use delimiters"
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "A correct technical answer is too advanced for new employees. Which prompt changes directly address that mismatch?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ask for more domain jargon to establish authority.",
+          "explanation": "Additional jargon makes the answer harder for this audience to understand."
+        },
+        {
+          "id": "B",
+          "text": "Identify the audience as new employees with no technical background.",
+          "explanation": "Audience information helps the model choose the right depth and vocabulary."
+        },
+        {
+          "id": "C",
+          "text": "Remove the factual reference material.",
+          "explanation": "Accuracy still needs the reference material; the mismatch is in presentation."
+        },
+        {
+          "id": "D",
+          "text": "Specify an onboarding instructor role and ask for a plain-language explanation.",
+          "explanation": "Role and style instructions guide a more suitable presentation of the same facts."
+        }
+      ],
+      "correct": [
+        "B",
+        "D"
+      ],
+      "takeaway": "Role and audience guide how information is explained, while reference material grounds its content.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.2 Define Role and Audience"
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "A downstream parser expects an object with “answer” and “department” fields, but the bot returns prose. What is the most direct prompt improvement?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Specify JSON with the required fields and instruct the model to omit surrounding prose.",
+          "explanation": "An explicit output format communicates the parser’s expectations. Validate the result in application code as well."
+        },
+        {
+          "id": "B",
+          "text": "Ask for a friendlier tone.",
+          "explanation": "Tone does not define a machine-readable structure."
+        },
+        {
+          "id": "C",
+          "text": "Add unrelated examples of long essays.",
+          "explanation": "These examples encourage the wrong output structure."
+        },
+        {
+          "id": "D",
+          "text": "Increase top_p to produce more formatting variety.",
+          "explanation": "More variation does not help satisfy a fixed output contract."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Specify the required output structure explicitly; a prompt is not a substitute for validation.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.3 Specifying output formats"
+        },
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.3 Ensuring reliability: Structured output"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "The bot follows the requested headings but its style varies widely. Which changes follow the lesson’s few-shot approach?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Add representative examples of the desired input-output behavior.",
+          "explanation": "Examples demonstrate the target style and structure concretely."
+        },
+        {
+          "id": "B",
+          "text": "Paste any available examples even if they contradict the required format.",
+          "explanation": "Conflicting examples create mixed signals instead of a useful pattern."
+        },
+        {
+          "id": "C",
+          "text": "Keep examples consistent with the explicit instructions.",
+          "explanation": "Consistent examples reinforce rather than compete with the intended behavior."
+        },
+        {
+          "id": "D",
+          "text": "Assume the examples permanently update model weights.",
+          "explanation": "Few-shot examples are supplied in the prompt; they do not constitute weight training."
+        }
+      ],
+      "correct": [
+        "A",
+        "C"
+      ],
+      "takeaway": "Few-shot prompting teaches a pattern through examples in context, without updating model weights.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.4 Providing few-shot examples"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "section": "prompt",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "After revising an AI judge prompt, accuracy on development examples rises from 80% to 100%, but evaluation accuracy falls from 82% to 60%. What is the strongest next action?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Adopt the revision because development accuracy is perfect.",
+          "explanation": "Perfect performance on examples used for revision does not establish generalization."
+        },
+        {
+          "id": "B",
+          "text": "Move every failed evaluation example into the development set and report its new score as independent.",
+          "explanation": "That removes the independence of the evaluation and hides the generalization problem."
+        },
+        {
+          "id": "C",
+          "text": "Change the labels to match the new judge.",
+          "explanation": "Labels should represent expert standards rather than conform to model mistakes."
+        },
+        {
+          "id": "D",
+          "text": "Inspect errors and label consistency, and prefer a prompt supported by evaluation performance.",
+          "explanation": "The lesson uses evaluation degradation to flag overfitting or sample problems and chooses the prompt on evaluation evidence."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "An AI judge must generalize beyond the examples used to improve its prompt.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "The \"AI Judge\" Training Process"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "section": "prompt",
+      "difficulty": "challenging",
+      "type": "multiple",
+      "question": "A team automatically rewrites a Q&A prompt until the model says its answer “looks good.” Which changes make this optimization loop more reliable?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Compare outputs with representative reference answers.",
+          "explanation": "Reference answers make missing or incorrect content visible during gap analysis."
+        },
+        {
+          "id": "B",
+          "text": "Use an explicit evaluation rubric with pass/fail criteria.",
+          "explanation": "A judge with defined criteria gives a more meaningful stopping signal than vague approval."
+        },
+        {
+          "id": "C",
+          "text": "Keep optimizing solely against one successful example.",
+          "explanation": "A single example cannot establish general performance and invites overfitting."
+        },
+        {
+          "id": "D",
+          "text": "Check performance on evaluation examples not used to rewrite the prompt.",
+          "explanation": "Separate evaluation helps detect a prompt that merely fits the development cases."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "takeaway": "Prompt optimization needs explicit standards and evidence of generalization.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.6 Meta Prompting: Let the LLM Be Your Prompt Coach"
+        },
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "The \"AI Judge\" Training Process"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "For a reasoning model that already performs internal reasoning, which prompting approach does this lesson recommend as the default?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Require a long, fixed reasoning script for every task.",
+          "explanation": "The lesson warns that unnecessary step-by-step constraints can restrict reasoning models."
+        },
+        {
+          "id": "B",
+          "text": "Remove the task context so the model can explore freely.",
+          "explanation": "Clear requirements and sufficient background still matter."
+        },
+        {
+          "id": "C",
+          "text": "Provide a clear task and sufficient context without routinely demanding “think step by step.”",
+          "explanation": "The lesson recommends concise instructions and avoids redundant chain-of-thought prompting for reasoning models."
+        },
+        {
+          "id": "D",
+          "text": "Use the same prompt forever regardless of observed failures.",
+          "explanation": "The lesson recommends revising prompts in response to outputs."
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Match prompting to the model: clear requirements remain essential even when reasoning is built in.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Technique 2: Avoid Chain-of-Thought Prompting"
+        },
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Technique 1: Keep task prompts concise and clear, provide sufficient background information"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What are the core pieces of a useful task prompt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It may memorize them and perform poorly on new examples.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What are the core pieces of a useful task prompt?"
+        },
+        {
+          "id": "B",
+          "text": "It communicates the required structure and makes the result easier to use downstream.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: What are the core pieces of a useful task prompt?"
+        },
+        {
+          "id": "C",
+          "text": "It makes output comparisons more meaningful by holding the cases constant.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: What are the core pieces of a useful task prompt?"
+        },
+        {
+          "id": "D",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "Correct: A clear instruction, relevant context, and a specified task or response expectation."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "A clear instruction, relevant context, and a specified task or response expectation.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "3.1 Basic elements"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What is a prompt template useful for?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When its evaluation results are good enough and stable against the defined criteria.",
+          "explanation": "This is a related lesson concept (4.7.3 \"Good Enough\" Means You Can \"Stop Training\"), but this card asks: What is a prompt template useful for?"
+        },
+        {
+          "id": "B",
+          "text": "Reusing stable instructions while inserting changing query and context values.",
+          "explanation": "Correct: Reusing stable instructions while inserting changing query and context values."
+        },
+        {
+          "id": "C",
+          "text": "It does not specify the task, needed evidence, or what a successful answer contains.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What is a prompt template useful for?"
+        },
+        {
+          "id": "D",
+          "text": "The identity and expertise the model adopts for the task.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What is a prompt template useful for?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Reusing stable instructions while inserting changing query and context values.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "3.2 Prompt template"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Why separate prompt instructions from reference documents?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Run an initial prompt, inspect failures, revise based on observed gaps, and repeat.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: Why separate prompt instructions from reference documents?"
+        },
+        {
+          "id": "B",
+          "text": "Different criteria need suitable measurable or rubric-based evaluation.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: Why separate prompt instructions from reference documents?"
+        },
+        {
+          "id": "C",
+          "text": "Clear boundaries help the model distinguish what to do from what to process.",
+          "explanation": "Correct: Clear boundaries help the model distinguish what to do from what to process."
+        },
+        {
+          "id": "D",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: Why separate prompt instructions from reference documents?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Clear boundaries help the model distinguish what to do from what to process.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.1 Clearly express requirements and use delimiters"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does a role definition shape in an answer?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Representative inputs and outputs that match the required format and style.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: What does a role definition shape in an answer?"
+        },
+        {
+          "id": "B",
+          "text": "The identity and expertise the model adopts for the task.",
+          "explanation": "Correct: The identity and expertise the model adopts for the task."
+        },
+        {
+          "id": "C",
+          "text": "A clear task and sufficient background information.",
+          "explanation": "This is a related lesson concept (Technique 1: Keep task prompts concise and clear, provide sufficient background information), but this card asks: What does a role definition shape in an answer?"
+        },
+        {
+          "id": "D",
+          "text": "The depth, tone, and vocabulary appropriate for the intended readers.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What does a role definition shape in an answer?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The identity and expertise the model adopts for the task.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.2 Define Role and Audience"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does an audience definition shape?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To measure whether the change improves the task beyond a single case.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: What does an audience definition shape?"
+        },
+        {
+          "id": "B",
+          "text": "The agreed business quality standards for good and bad answers.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: What does an audience definition shape?"
+        },
+        {
+          "id": "C",
+          "text": "Different criteria need suitable measurable or rubric-based evaluation.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: What does an audience definition shape?"
+        },
+        {
+          "id": "D",
+          "text": "The depth, tone, and vocabulary appropriate for the intended readers.",
+          "explanation": "Correct: The depth, tone, and vocabulary appropriate for the intended readers."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "The depth, tone, and vocabulary appropriate for the intended readers.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.2 Define Role and Audience"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Why specify an output format explicitly?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It communicates the required structure and makes the result easier to use downstream.",
+          "explanation": "Correct: It communicates the required structure and makes the result easier to use downstream."
+        },
+        {
+          "id": "B",
+          "text": "Different criteria need suitable measurable or rubric-based evaluation.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: Why specify an output format explicitly?"
+        },
+        {
+          "id": "C",
+          "text": "No. They guide the current inference through the prompt.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: Why specify an output format explicitly?"
+        },
+        {
+          "id": "D",
+          "text": "They test generalization on cases not used to revise the prompt.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: Why specify an output format explicitly?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "It communicates the required structure and makes the result easier to use downstream.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.3 Specifying output formats"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What is few-shot prompting?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Providing examples in context so the model can follow a demonstrated pattern.",
+          "explanation": "Correct: Providing examples in context so the model can follow a demonstrated pattern."
+        },
+        {
+          "id": "B",
+          "text": "The depth, tone, and vocabulary appropriate for the intended readers.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What is few-shot prompting?"
+        },
+        {
+          "id": "C",
+          "text": "Overfitting to the training examples rather than generalizing.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What is few-shot prompting?"
+        },
+        {
+          "id": "D",
+          "text": "The model can more reliably identify each task and expected output component.",
+          "explanation": "This is a related lesson concept (4.1 Clearly express requirements and use delimiters), but this card asks: What is few-shot prompting?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Providing examples in context so the model can follow a demonstrated pattern.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.4 Providing few-shot examples"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "section": "prompt",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Do few-shot examples update model weights?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear task and sufficient background information.",
+          "explanation": "This is a related lesson concept (Technique 1: Keep task prompts concise and clear, provide sufficient background information), but this card asks: Do few-shot examples update model weights?"
+        },
+        {
+          "id": "B",
+          "text": "Run an initial prompt, inspect failures, revise based on observed gaps, and repeat.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: Do few-shot examples update model weights?"
+        },
+        {
+          "id": "C",
+          "text": "Factual correctness or sufficient evidence for the answer.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: Do few-shot examples update model weights?"
+        },
+        {
+          "id": "D",
+          "text": "No. They guide the current inference through the prompt.",
+          "explanation": "Correct: No. They guide the current inference through the prompt."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "No. They guide the current inference through the prompt.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.4 Providing few-shot examples"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What should examples demonstrate for a strict output task?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear task and sufficient background information.",
+          "explanation": "This is a related lesson concept (Technique 1: Keep task prompts concise and clear, provide sufficient background information), but this card asks: What should examples demonstrate for a strict output task?"
+        },
+        {
+          "id": "B",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What should examples demonstrate for a strict output task?"
+        },
+        {
+          "id": "C",
+          "text": "Representative inputs and outputs that match the required format and style.",
+          "explanation": "Correct: Representative inputs and outputs that match the required format and style."
+        },
+        {
+          "id": "D",
+          "text": "It may memorize them and perform poorly on new examples.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What should examples demonstrate for a strict output task?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Representative inputs and outputs that match the required format and style.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.4 Providing few-shot examples"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why is “be accurate” often an insufficient instruction by itself?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Using the model to analyze and improve a prompt through iteration.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: Why is “be accurate” often an insufficient instruction by itself?"
+        },
+        {
+          "id": "B",
+          "text": "Clear boundaries help the model distinguish what to do from what to process.",
+          "explanation": "This is a related lesson concept (4.1 Clearly express requirements and use delimiters), but this card asks: Why is “be accurate” often an insufficient instruction by itself?"
+        },
+        {
+          "id": "C",
+          "text": "Overfitting to the training examples rather than generalizing.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: Why is “be accurate” often an insufficient instruction by itself?"
+        },
+        {
+          "id": "D",
+          "text": "It does not specify the task, needed evidence, or what a successful answer contains.",
+          "explanation": "Correct: It does not specify the task, needed evidence, or what a successful answer contains."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "It does not specify the task, needed evidence, or what a successful answer contains.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "3.1 Basic elements"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is meta prompting in this lesson?",
+      "options": [
+        {
+          "id": "A",
+          "text": "They show concrete inputs and outputs that define the intended behavior.",
+          "explanation": "This is a related lesson concept (Technique 3: Adjust Prompts Based on Model Responses), but this card asks: What is meta prompting in this lesson?"
+        },
+        {
+          "id": "B",
+          "text": "Using the model to analyze and improve a prompt through iteration.",
+          "explanation": "Correct: Using the model to analyze and improve a prompt through iteration."
+        },
+        {
+          "id": "C",
+          "text": "Different criteria need suitable measurable or rubric-based evaluation.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: What is meta prompting in this lesson?"
+        },
+        {
+          "id": "D",
+          "text": "The identity and expertise the model adopts for the task.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What is meta prompting in this lesson?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Using the model to analyze and improve a prompt through iteration.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.6 Meta Prompting: Let the LLM Be Your Prompt Coach"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What starts a useful prompt-optimization cycle?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The expected keys, value types or shape, and whether surrounding text is forbidden.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: What starts a useful prompt-optimization cycle?"
+        },
+        {
+          "id": "B",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What starts a useful prompt-optimization cycle?"
+        },
+        {
+          "id": "C",
+          "text": "It communicates the required structure and makes the result easier to use downstream.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: What starts a useful prompt-optimization cycle?"
+        },
+        {
+          "id": "D",
+          "text": "Run an initial prompt, inspect failures, revise based on observed gaps, and repeat.",
+          "explanation": "Correct: Run an initial prompt, inspect failures, revise based on observed gaps, and repeat."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Run an initial prompt, inspect failures, revise based on observed gaps, and repeat.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.6 Meta Prompting: Let the LLM Be Your Prompt Coach"
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What role do reference answers play in prompt gap analysis?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No. They guide the current inference through the prompt.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: What role do reference answers play in prompt gap analysis?"
+        },
+        {
+          "id": "B",
+          "text": "The identity and expertise the model adopts for the task.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What role do reference answers play in prompt gap analysis?"
+        },
+        {
+          "id": "C",
+          "text": "They show concrete inputs and outputs that define the intended behavior.",
+          "explanation": "This is a related lesson concept (Technique 3: Adjust Prompts Based on Model Responses), but this card asks: What role do reference answers play in prompt gap analysis?"
+        },
+        {
+          "id": "D",
+          "text": "They reveal missing or incorrect content in generated answers.",
+          "explanation": "Correct: They reveal missing or incorrect content in generated answers."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "They reveal missing or incorrect content in generated answers.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Multi-Round Iteration: Introducing Reference Answers for Gap Analysis"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why evaluate optimized prompts on representative examples?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: Why evaluate optimized prompts on representative examples?"
+        },
+        {
+          "id": "B",
+          "text": "It communicates the required structure and makes the result easier to use downstream.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: Why evaluate optimized prompts on representative examples?"
+        },
+        {
+          "id": "C",
+          "text": "A clear task and sufficient background information.",
+          "explanation": "This is a related lesson concept (Technique 1: Keep task prompts concise and clear, provide sufficient background information), but this card asks: Why evaluate optimized prompts on representative examples?"
+        },
+        {
+          "id": "D",
+          "text": "To measure whether the change improves the task beyond a single case.",
+          "explanation": "Correct: To measure whether the change improves the task beyond a single case."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "To measure whether the change improves the task beyond a single case.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Effectiveness Evaluation: Quantifying Your Optimization Results"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What makes a useful AI judge stop condition?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No. They guide the current inference through the prompt.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: What makes a useful AI judge stop condition?"
+        },
+        {
+          "id": "B",
+          "text": "Predefined, explicit criteria that yield a clear pass or fail assessment.",
+          "explanation": "Correct: Predefined, explicit criteria that yield a clear pass or fail assessment."
+        },
+        {
+          "id": "C",
+          "text": "Run an initial prompt, inspect failures, revise based on observed gaps, and repeat.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: What makes a useful AI judge stop condition?"
+        },
+        {
+          "id": "D",
+          "text": "Fix the sample quality and standards before continuing prompt iteration.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What makes a useful AI judge stop condition?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Predefined, explicit criteria that yield a clear pass or fail assessment.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.7 Let the LLM Help You Build a Custom \"AI Judge\""
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What belongs in the AI judge’s sample set?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Representative inputs and outputs that match the required format and style.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: What belongs in the AI judge’s sample set?"
+        },
+        {
+          "id": "B",
+          "text": "It makes output comparisons more meaningful by holding the cases constant.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: What belongs in the AI judge’s sample set?"
+        },
+        {
+          "id": "C",
+          "text": "High-quality examples labeled against consistent standards.",
+          "explanation": "Correct: High-quality examples labeled against consistent standards."
+        },
+        {
+          "id": "D",
+          "text": "Add or clarify the missing requirement based on the observed response.",
+          "explanation": "This is a related lesson concept (Technique 3: Adjust Prompts Based on Model Responses), but this card asks: What belongs in the AI judge’s sample set?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "High-quality examples labeled against consistent standards.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.7.1 Prepare and Split the Dataset"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why keep evaluation samples separate while tuning a judge prompt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "They test generalization on cases not used to revise the prompt.",
+          "explanation": "Correct: They test generalization on cases not used to revise the prompt."
+        },
+        {
+          "id": "B",
+          "text": "To measure whether the change improves the task beyond a single case.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: Why keep evaluation samples separate while tuning a judge prompt?"
+        },
+        {
+          "id": "C",
+          "text": "Overfitting to the training examples rather than generalizing.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: Why keep evaluation samples separate while tuning a judge prompt?"
+        },
+        {
+          "id": "D",
+          "text": "The depth, tone, and vocabulary appropriate for the intended readers.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: Why keep evaluation samples separate while tuning a judge prompt?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "They test generalization on cases not used to revise the prompt.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.7.1 Prepare and Split the Dataset"
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What can a train-evaluation performance gap indicate for an AI judge?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What can a train-evaluation performance gap indicate for an AI judge?"
+        },
+        {
+          "id": "B",
+          "text": "Overfitting to the training examples rather than generalizing.",
+          "explanation": "Correct: Overfitting to the training examples rather than generalizing."
+        },
+        {
+          "id": "C",
+          "text": "Do not routinely demand step-by-step reasoning when the model already reasons deeply.",
+          "explanation": "This is a related lesson concept (Technique 2: Avoid Chain-of-Thought Prompting), but this card asks: What can a train-evaluation performance gap indicate for an AI judge?"
+        },
+        {
+          "id": "D",
+          "text": "It makes output comparisons more meaningful by holding the cases constant.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: What can a train-evaluation performance gap indicate for an AI judge?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Overfitting to the training examples rather than generalizing.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "The \"AI Judge\" Training Process"
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What should happen when judge labels are ambiguous or contradictory?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Do not routinely demand step-by-step reasoning when the model already reasons deeply.",
+          "explanation": "This is a related lesson concept (Technique 2: Avoid Chain-of-Thought Prompting), but this card asks: What should happen when judge labels are ambiguous or contradictory?"
+        },
+        {
+          "id": "B",
+          "text": "When its evaluation results are good enough and stable against the defined criteria.",
+          "explanation": "This is a related lesson concept (4.7.3 \"Good Enough\" Means You Can \"Stop Training\"), but this card asks: What should happen when judge labels are ambiguous or contradictory?"
+        },
+        {
+          "id": "C",
+          "text": "Fix the sample quality and standards before continuing prompt iteration.",
+          "explanation": "Correct: Fix the sample quality and standards before continuing prompt iteration."
+        },
+        {
+          "id": "D",
+          "text": "Reusing stable instructions while inserting changing query and context values.",
+          "explanation": "This is a related lesson concept (3.2 Prompt template), but this card asks: What should happen when judge labels are ambiguous or contradictory?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Fix the sample quality and standards before continuing prompt iteration.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "The \"AI Judge\" Training Process"
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "When should a team stop optimizing an AI judge prompt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When its evaluation results are good enough and stable against the defined criteria.",
+          "explanation": "Correct: When its evaluation results are good enough and stable against the defined criteria."
+        },
+        {
+          "id": "B",
+          "text": "They test generalization on cases not used to revise the prompt.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: When should a team stop optimizing an AI judge prompt?"
+        },
+        {
+          "id": "C",
+          "text": "The depth, tone, and vocabulary appropriate for the intended readers.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: When should a team stop optimizing an AI judge prompt?"
+        },
+        {
+          "id": "D",
+          "text": "The agreed business quality standards for good and bad answers.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: When should a team stop optimizing an AI judge prompt?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "When its evaluation results are good enough and stable against the defined criteria.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.7.3 \"Good Enough\" Means You Can \"Stop Training\""
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is the default chain-of-thought advice for reasoning models?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What is the default chain-of-thought advice for reasoning models?"
+        },
+        {
+          "id": "B",
+          "text": "Do not routinely demand step-by-step reasoning when the model already reasons deeply.",
+          "explanation": "Correct: Do not routinely demand step-by-step reasoning when the model already reasons deeply."
+        },
+        {
+          "id": "C",
+          "text": "It makes output comparisons more meaningful by holding the cases constant.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: What is the default chain-of-thought advice for reasoning models?"
+        },
+        {
+          "id": "D",
+          "text": "Predefined, explicit criteria that yield a clear pass or fail assessment.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: What is the default chain-of-thought advice for reasoning models?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Do not routinely demand step-by-step reasoning when the model already reasons deeply.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Technique 2: Avoid Chain-of-Thought Prompting"
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What do reasoning models still need in a prompt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear task and sufficient background information.",
+          "explanation": "Correct: A clear task and sufficient background information."
+        },
+        {
+          "id": "B",
+          "text": "Factual correctness or sufficient evidence for the answer.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What do reasoning models still need in a prompt?"
+        },
+        {
+          "id": "C",
+          "text": "Predefined, explicit criteria that yield a clear pass or fail assessment.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: What do reasoning models still need in a prompt?"
+        },
+        {
+          "id": "D",
+          "text": "The depth, tone, and vocabulary appropriate for the intended readers.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: What do reasoning models still need in a prompt?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "A clear task and sufficient background information.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Technique 1: Keep task prompts concise and clear, provide sufficient background information"
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "How can examples help clarify an abstract task?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To measure whether the change improves the task beyond a single case.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: How can examples help clarify an abstract task?"
+        },
+        {
+          "id": "B",
+          "text": "They show concrete inputs and outputs that define the intended behavior.",
+          "explanation": "Correct: They show concrete inputs and outputs that define the intended behavior."
+        },
+        {
+          "id": "C",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: How can examples help clarify an abstract task?"
+        },
+        {
+          "id": "D",
+          "text": "Factual correctness or sufficient evidence for the answer.",
+          "explanation": "This is a related lesson concept (4.2 Define Role and Audience), but this card asks: How can examples help clarify an abstract task?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "They show concrete inputs and outputs that define the intended behavior.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Technique 3: Adjust Prompts Based on Model Responses"
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a useful way to refine a prompt after a model failure?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Add or clarify the missing requirement based on the observed response.",
+          "explanation": "Correct: Add or clarify the missing requirement based on the observed response."
+        },
+        {
+          "id": "B",
+          "text": "It may memorize them and perform poorly on new examples.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What is a useful way to refine a prompt after a model failure?"
+        },
+        {
+          "id": "C",
+          "text": "Do not routinely demand step-by-step reasoning when the model already reasons deeply.",
+          "explanation": "This is a related lesson concept (Technique 2: Avoid Chain-of-Thought Prompting), but this card asks: What is a useful way to refine a prompt after a model failure?"
+        },
+        {
+          "id": "D",
+          "text": "High-quality examples labeled against consistent standards.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: What is a useful way to refine a prompt after a model failure?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Add or clarify the missing requirement based on the observed response.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Technique 3: Adjust Prompts Based on Model Responses"
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why evaluate objective and subjective answer qualities separately where possible?",
+      "options": [
+        {
+          "id": "A",
+          "text": "They test generalization on cases not used to revise the prompt.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: Why evaluate objective and subjective answer qualities separately where possible?"
+        },
+        {
+          "id": "B",
+          "text": "Different criteria need suitable measurable or rubric-based evaluation.",
+          "explanation": "Correct: Different criteria need suitable measurable or rubric-based evaluation."
+        },
+        {
+          "id": "C",
+          "text": "The expected keys, value types or shape, and whether surrounding text is forbidden.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: Why evaluate objective and subjective answer qualities separately where possible?"
+        },
+        {
+          "id": "D",
+          "text": "Run an initial prompt, inspect failures, revise based on observed gaps, and repeat.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: Why evaluate objective and subjective answer qualities separately where possible?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Different criteria need suitable measurable or rubric-based evaluation.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.7 Let the LLM Help You Build a Custom \"AI Judge\""
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What can happen if a judge is tuned only on its training examples?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What can happen if a judge is tuned only on its training examples?"
+        },
+        {
+          "id": "B",
+          "text": "Using the model to analyze and improve a prompt through iteration.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: What can happen if a judge is tuned only on its training examples?"
+        },
+        {
+          "id": "C",
+          "text": "It may memorize them and perform poorly on new examples.",
+          "explanation": "Correct: It may memorize them and perform poorly on new examples."
+        },
+        {
+          "id": "D",
+          "text": "Fix the sample quality and standards before continuing prompt iteration.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What can happen if a judge is tuned only on its training examples?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "It may memorize them and perform poorly on new examples.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "The \"AI Judge\" Training Process"
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why should prompt requirements be organized clearly?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model can more reliably identify each task and expected output component.",
+          "explanation": "Correct: The model can more reliably identify each task and expected output component."
+        },
+        {
+          "id": "B",
+          "text": "It may memorize them and perform poorly on new examples.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: Why should prompt requirements be organized clearly?"
+        },
+        {
+          "id": "C",
+          "text": "Reusing stable instructions while inserting changing query and context values.",
+          "explanation": "This is a related lesson concept (3.2 Prompt template), but this card asks: Why should prompt requirements be organized clearly?"
+        },
+        {
+          "id": "D",
+          "text": "Overfitting to the training examples rather than generalizing.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: Why should prompt requirements be organized clearly?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "The model can more reliably identify each task and expected output component.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.1 Clearly express requirements and use delimiters"
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "section": "prompt",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does a role instruction alone fail to guarantee?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It may memorize them and perform poorly on new examples.",
+          "explanation": "This is a related lesson concept (The \"AI Judge\" Training Process), but this card asks: What does a role instruction alone fail to guarantee?"
+        },
+        {
+          "id": "B",
+          "text": "Factual correctness or sufficient evidence for the answer.",
+          "explanation": "Correct: Factual correctness or sufficient evidence for the answer."
+        },
+        {
+          "id": "C",
+          "text": "The expected keys, value types or shape, and whether surrounding text is forbidden.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: What does a role instruction alone fail to guarantee?"
+        },
+        {
+          "id": "D",
+          "text": "It communicates the required structure and makes the result easier to use downstream.",
+          "explanation": "This is a related lesson concept (4.3 Specifying output formats), but this card asks: What does a role instruction alone fail to guarantee?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Factual correctness or sufficient evidence for the answer.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.2 Define Role and Audience"
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "section": "prompt",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What should a JSON prompt state beyond “return JSON”?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The expected keys, value types or shape, and whether surrounding text is forbidden.",
+          "explanation": "Correct: The expected keys, value types or shape, and whether surrounding text is forbidden."
+        },
+        {
+          "id": "B",
+          "text": "Using the model to analyze and improve a prompt through iteration.",
+          "explanation": "This is a related lesson concept (4.6 Meta Prompting: Let the LLM Be Your Prompt Coach), but this card asks: What should a JSON prompt state beyond “return JSON”?"
+        },
+        {
+          "id": "C",
+          "text": "To measure whether the change improves the task beyond a single case.",
+          "explanation": "This is a related lesson concept (Effectiveness Evaluation: Quantifying Your Optimization Results), but this card asks: What should a JSON prompt state beyond “return JSON”?"
+        },
+        {
+          "id": "D",
+          "text": "The model can more reliably identify each task and expected output component.",
+          "explanation": "This is a related lesson concept (4.1 Clearly express requirements and use delimiters), but this card asks: What should a JSON prompt state beyond “return JSON”?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "The expected keys, value types or shape, and whether surrounding text is forbidden.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.3 Specifying output formats"
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "section": "prompt",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "Why use a consistent evaluation set across prompt revisions?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When its evaluation results are good enough and stable against the defined criteria.",
+          "explanation": "This is a related lesson concept (4.7.3 \"Good Enough\" Means You Can \"Stop Training\"), but this card asks: Why use a consistent evaluation set across prompt revisions?"
+        },
+        {
+          "id": "B",
+          "text": "High-quality examples labeled against consistent standards.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: Why use a consistent evaluation set across prompt revisions?"
+        },
+        {
+          "id": "C",
+          "text": "It makes output comparisons more meaningful by holding the cases constant.",
+          "explanation": "Correct: It makes output comparisons more meaningful by holding the cases constant."
+        },
+        {
+          "id": "D",
+          "text": "They test generalization on cases not used to revise the prompt.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: Why use a consistent evaluation set across prompt revisions?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "It makes output comparisons more meaningful by holding the cases constant.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "Effectiveness Evaluation: Quantifying Your Optimization Results"
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "section": "prompt",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What is the risk of accepting an LLM prompt coach’s suggestion without testing it?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The agreed business quality standards for good and bad answers.",
+          "explanation": "This is a related lesson concept (4.7.1 Prepare and Split the Dataset), but this card asks: What is the risk of accepting an LLM prompt coach’s suggestion without testing it?"
+        },
+        {
+          "id": "B",
+          "text": "A change can improve one answer while harming representative cases.",
+          "explanation": "Correct: A change can improve one answer while harming representative cases."
+        },
+        {
+          "id": "C",
+          "text": "Different criteria need suitable measurable or rubric-based evaluation.",
+          "explanation": "This is a related lesson concept (4.7 Let the LLM Help You Build a Custom \"AI Judge\"), but this card asks: What is the risk of accepting an LLM prompt coach’s suggestion without testing it?"
+        },
+        {
+          "id": "D",
+          "text": "Representative inputs and outputs that match the required format and style.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: What is the risk of accepting an LLM prompt coach’s suggestion without testing it?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "A change can improve one answer while harming representative cases.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.6 Meta Prompting: Let the LLM Be Your Prompt Coach"
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "section": "prompt",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What should labeled AI-judge examples reflect?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Reusing stable instructions while inserting changing query and context values.",
+          "explanation": "This is a related lesson concept (3.2 Prompt template), but this card asks: What should labeled AI-judge examples reflect?"
+        },
+        {
+          "id": "B",
+          "text": "The agreed business quality standards for good and bad answers.",
+          "explanation": "Correct: The agreed business quality standards for good and bad answers."
+        },
+        {
+          "id": "C",
+          "text": "A clear instruction, relevant context, and a specified task or response expectation.",
+          "explanation": "This is a related lesson concept (3.1 Basic elements), but this card asks: What should labeled AI-judge examples reflect?"
+        },
+        {
+          "id": "D",
+          "text": "Representative inputs and outputs that match the required format and style.",
+          "explanation": "This is a related lesson concept (4.4 Providing few-shot examples), but this card asks: What should labeled AI-judge examples reflect?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The agreed business quality standards for good and bad answers.",
+      "sources": [
+        {
+          "file": "2_3_Optimize_Prompts_to_Improve_FAQ_Bot_Response_Quality.ipynb",
+          "heading": "4.7.1 Prepare and Split the Dataset"
+        }
+      ]
+    }
+  ],
+  "section": {
+    "id": "prompt",
+    "title": "Prompt Engineering",
+    "previousScore": 50,
+    "target": 40
+  }
+}

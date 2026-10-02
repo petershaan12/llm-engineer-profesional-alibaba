@@ -1,0 +1,1592 @@
+{
+  "version": 1,
+  "title": "AI Agent and Applications",
+  "questions": [
+    {
+      "id": "Q37",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "The model returns a tool_calls entry containing a function name and arguments. What must the application do next?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Assume the model has already executed the function.",
+          "explanation": "The returned tool call describes a requested action; application code performs execution."
+        },
+        {
+          "id": "B",
+          "text": "Display the function arguments as the final factual answer.",
+          "explanation": "Arguments are inputs to the tool, not its observed result."
+        },
+        {
+          "id": "C",
+          "text": "Validate and execute the permitted function, then send its result back as a tool message.",
+          "explanation": "The application executes the tool and returns its result so the model can continue or answer."
+        },
+        {
+          "id": "D",
+          "text": "Permanently add the arguments to the model’s weights.",
+          "explanation": "Tool calling uses messages and execution rather than fine-tuning."
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Tool calling proposes an action; the application validates, executes, and reports its result.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.4.1 How function calling works"
+        },
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.3 Ensuring reliability: Structured output"
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Several agent applications duplicate definitions for the same tools. Each tool change requires edits in every application. What role does MCP play in the lesson?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Provide a standard way to expose and connect reusable tools through client-server separation.",
+          "explanation": "The lesson presents MCP as decoupling tool providers from agent consumers to reduce duplicated integration work."
+        },
+        {
+          "id": "B",
+          "text": "Automatically decide the best plan for every user task.",
+          "explanation": "MCP standardizes integrations; planning remains an agent capability and design choice."
+        },
+        {
+          "id": "C",
+          "text": "Replace all application permission checks.",
+          "explanation": "A common tool interface does not eliminate authorization responsibilities."
+        },
+        {
+          "id": "D",
+          "text": "Train a new language model whenever a tool signature changes.",
+          "explanation": "Tool integration changes do not inherently require model training."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "MCP supports reusable tool integration; it does not replace planning or security controls.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.5.2 Decoupling concept of MCP"
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "A course-writing agent must research before drafting. Independent factual and style reviews may run together, but a human must approve publication. Which workflow choices fit?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Use a pipeline for research followed by drafting.",
+          "explanation": "The draft depends on research results, so those stages have an order."
+        },
+        {
+          "id": "B",
+          "text": "Run the independent reviews in parallel after drafting.",
+          "explanation": "Independent checks can run concurrently once their shared input exists."
+        },
+        {
+          "id": "C",
+          "text": "Publish in parallel with research before a draft or approval exists.",
+          "explanation": "Publication depends on a completed, approved draft and cannot safely precede those inputs."
+        },
+        {
+          "id": "D",
+          "text": "Insert a human-in-the-loop approval stage before publication.",
+          "explanation": "The workflow must implement the stated requirement for human approval."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "takeaway": "Choose workflow patterns from actual dependencies and approval requirements.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3 Several workflow patterns"
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "multiple",
+      "question": "An agent’s final answers fail after long sessions. Investigation suggests either lost user preferences or bad tool decisions. Which actions help isolate and repair these failures?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Evaluate memory retrieval and tool-selection components separately.",
+          "explanation": "Component-level evaluation identifies where the end-to-end result goes wrong."
+        },
+        {
+          "id": "B",
+          "text": "Ask the agent to praise its own final answer and treat that as verification.",
+          "explanation": "Unstructured self-approval gives no reliable external evidence of correctness."
+        },
+        {
+          "id": "C",
+          "text": "Test a rolling summary or retrieval-based memory against preference-retention cases.",
+          "explanation": "The lesson’s memory strategies address limits of keeping or truncating raw conversation history; evaluation checks the trade-off."
+        },
+        {
+          "id": "D",
+          "text": "Use actual tool results as feedback and rerun representative end-to-end tasks.",
+          "explanation": "External feedback can ground reflection, and end-to-end evaluation confirms the combined system still serves the user."
+        }
+      ],
+      "correct": [
+        "A",
+        "C",
+        "D"
+      ],
+      "takeaway": "Isolate failing components, ground checks in evidence, and confirm improvements on complete tasks.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.2 Evaluation method two: White-box evaluation"
+        },
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3 Memory management strategies"
+        },
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "2.3.2 Mode two: External feedback"
+        },
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.1 Evaluation method one: End-to-end evaluation"
+        }
+      ]
+    },
+    {
+      "id": "Q05",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What is a tool schema used for in function calling?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "This is a related lesson concept (3.3.1 Pattern one: Pipeline), but this card asks: What is a tool schema used for in function calling?"
+        },
+        {
+          "id": "B",
+          "text": "Think, act, and observe the tool result before choosing the next step.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What is a tool schema used for in function calling?"
+        },
+        {
+          "id": "C",
+          "text": "Describe the function name, purpose, and structured input parameters to the model.",
+          "explanation": "Correct: Describe the function name, purpose, and structured input parameters to the model."
+        },
+        {
+          "id": "D",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "This is a related lesson concept (6.3.5 Building short-term and long-term memory systems), but this card asks: What is a tool schema used for in function calling?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Describe the function name, purpose, and structured input parameters to the model.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.4.1 How function calling works"
+        }
+      ]
+    },
+    {
+      "id": "Q06",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Does the model execute a function when it returns a tool call?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It may not handle tasks whose next steps depend on unforeseen results.",
+          "explanation": "This is a related lesson concept (4.1 Limitations of fixed workflows), but this card asks: Does the model execute a function when it returns a tool call?"
+        },
+        {
+          "id": "B",
+          "text": "No. The application parses, validates, and executes the requested function.",
+          "explanation": "Correct: No. The application parses, validates, and executes the requested function."
+        },
+        {
+          "id": "C",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "This is a related lesson concept (3.3.1 Pattern one: Pipeline), but this card asks: Does the model execute a function when it returns a tool call?"
+        },
+        {
+          "id": "D",
+          "text": "The information, tools, and memory supplied to a model to complete a task.",
+          "explanation": "This is a related lesson concept (8.2 Core methodology: Context engineering), but this card asks: Does the model execute a function when it returns a tool call?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "No. The application parses, validates, and executes the requested function.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.4.1 How function calling works"
+        }
+      ]
+    },
+    {
+      "id": "Q07",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What should the application do after a tool finishes?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "This is a related lesson concept (6.3.5 Building short-term and long-term memory systems), but this card asks: What should the application do after a tool finishes?"
+        },
+        {
+          "id": "B",
+          "text": "A summary updated over time to retain key information as raw history grows.",
+          "explanation": "This is a related lesson concept (6.3.2 Strategy two: Extracting key points – rolling summary), but this card asks: What should the application do after a tool finishes?"
+        },
+        {
+          "id": "C",
+          "text": "Send its result back as a tool message so the model can continue or answer.",
+          "explanation": "Correct: Send its result back as a tool message so the model can continue or answer."
+        },
+        {
+          "id": "D",
+          "text": "Component tests help locate the source of a failure in a complex workflow.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: What should the application do after a tool finishes?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Send its result back as a tool message so the model can continue or answer.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.4.1 How function calling works"
+        }
+      ]
+    },
+    {
+      "id": "Q08",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does the ReAct loop stand for?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Send its result back as a tool message so the model can continue or answer.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: What does the ReAct loop stand for?"
+        },
+        {
+          "id": "B",
+          "text": "Think, act, and observe the tool result before choosing the next step.",
+          "explanation": "Correct: Think, act, and observe the tool result before choosing the next step."
+        },
+        {
+          "id": "C",
+          "text": "The information, tools, and memory supplied to a model to complete a task.",
+          "explanation": "This is a related lesson concept (8.2 Core methodology: Context engineering), but this card asks: What does the ReAct loop stand for?"
+        },
+        {
+          "id": "D",
+          "text": "Evidence from a tool, test, or other independent validation source.",
+          "explanation": "This is a related lesson concept (2.3.2 Mode two: External feedback), but this card asks: What does the ReAct loop stand for?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Think, act, and observe the tool result before choosing the next step.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.4.2 ReAct pattern: Think-act-observe"
+        }
+      ]
+    },
+    {
+      "id": "Q09",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What reliability loop helps with structured model output?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It may not handle tasks whose next steps depend on unforeseen results.",
+          "explanation": "This is a related lesson concept (4.1 Limitations of fixed workflows), but this card asks: What reliability loop helps with structured model output?"
+        },
+        {
+          "id": "B",
+          "text": "The model may repeat its own unsupported assumptions without external evidence.",
+          "explanation": "This is a related lesson concept (2.3.1.3 Drawbacks of self-reflection), but this card asks: What reliability loop helps with structured model output?"
+        },
+        {
+          "id": "C",
+          "text": "Guide the model, validate its output, and retry when appropriate.",
+          "explanation": "Correct: Guide the model, validate its output, and retry when appropriate."
+        },
+        {
+          "id": "D",
+          "text": "Start with an MVP, observe real errors, then turn important failures into criteria.",
+          "explanation": "This is a related lesson concept (7.3.1.1 Iterative establishment of evaluation criteria), but this card asks: What reliability loop helps with structured model output?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Guide the model, validate its output, and retry when appropriate.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.3.2 Building a \"guide-validate-retry\" closed loop"
+        }
+      ]
+    },
+    {
+      "id": "Q10",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "Why is structured output useful for agent tools?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Details may be omitted or distorted during repeated summarization.",
+          "explanation": "This is a related lesson concept (6.3.2 Strategy two: Extracting key points – rolling summary), but this card asks: Why is structured output useful for agent tools?"
+        },
+        {
+          "id": "B",
+          "text": "The information, tools, and memory supplied to a model to complete a task.",
+          "explanation": "This is a related lesson concept (8.2 Core methodology: Context engineering), but this card asks: Why is structured output useful for agent tools?"
+        },
+        {
+          "id": "C",
+          "text": "It makes the model’s intent and parameters easier for software to validate.",
+          "explanation": "Correct: It makes the model’s intent and parameters easier for software to validate."
+        },
+        {
+          "id": "D",
+          "text": "Retrieval of relevant stored facts beyond the immediate conversation window.",
+          "explanation": "This is a related lesson concept (6.3.3 Strategy three: Building a knowledge base – vector-based retrieval), but this card asks: Why is structured output useful for agent tools?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "It makes the model’s intent and parameters easier for software to validate.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.3 Ensuring reliability: Structured output"
+        }
+      ]
+    },
+    {
+      "id": "Q11",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What problem does MCP address for reusable tools?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tool providers from agent applications that consume those tools.",
+          "explanation": "This is a related lesson concept (1.5.2 Decoupling concept of MCP), but this card asks: What problem does MCP address for reusable tools?"
+        },
+        {
+          "id": "B",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "This is a related lesson concept (2.3.1 Mode one: Self review), but this card asks: What problem does MCP address for reusable tools?"
+        },
+        {
+          "id": "C",
+          "text": "Duplicated tool definitions and maintenance across separate agent applications.",
+          "explanation": "Correct: Duplicated tool definitions and maintenance across separate agent applications."
+        },
+        {
+          "id": "D",
+          "text": "A high-impact decision needs human review or approval.",
+          "explanation": "This is a related lesson concept (3.3.5 Pattern five: Human-in-the-loop (HITL)), but this card asks: What problem does MCP address for reusable tools?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Duplicated tool definitions and maintenance across separate agent applications.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.5.1 Challenges of tool reuse"
+        }
+      ]
+    },
+    {
+      "id": "Q12",
+      "section": "agents",
+      "difficulty": "foundational",
+      "type": "single",
+      "question": "What does MCP separate in its client-server model?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tool providers from agent applications that consume those tools.",
+          "explanation": "Correct: Tool providers from agent applications that consume those tools."
+        },
+        {
+          "id": "B",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "This is a related lesson concept (2.3.1 Mode one: Self review), but this card asks: What does MCP separate in its client-server model?"
+        },
+        {
+          "id": "C",
+          "text": "Keeping a limited recent portion of conversation history and dropping older turns.",
+          "explanation": "This is a related lesson concept (6.3.1 Strategy one: Simple \"forgetting\" – fixed window truncation), but this card asks: What does MCP separate in its client-server model?"
+        },
+        {
+          "id": "D",
+          "text": "When the operation is sensitive, high-impact, or outside an explicitly safe scope.",
+          "explanation": "This is a related lesson concept (3.3.5 Pattern five: Human-in-the-loop (HITL)), but this card asks: What does MCP separate in its client-server model?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Tool providers from agent applications that consume those tools.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.5.2 Decoupling concept of MCP"
+        }
+      ]
+    },
+    {
+      "id": "Q13",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "When is a pipeline workflow appropriate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "Correct: When later steps depend on results produced by earlier steps."
+        },
+        {
+          "id": "B",
+          "text": "It makes the model’s intent and parameters easier for software to validate.",
+          "explanation": "This is a related lesson concept (1.3 Ensuring reliability: Structured output), but this card asks: When is a pipeline workflow appropriate?"
+        },
+        {
+          "id": "C",
+          "text": "Start with an MVP, observe real errors, then turn important failures into criteria.",
+          "explanation": "This is a related lesson concept (7.3.1.1 Iterative establishment of evaluation criteria), but this card asks: When is a pipeline workflow appropriate?"
+        },
+        {
+          "id": "D",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "This is a related lesson concept (2.3.1 Mode one: Self review), but this card asks: When is a pipeline workflow appropriate?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "When later steps depend on results produced by earlier steps.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3.1 Pattern one: Pipeline"
+        }
+      ]
+    },
+    {
+      "id": "Q14",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "When is a branching workflow appropriate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When a condition or classification routes work down different paths.",
+          "explanation": "Correct: When a condition or classification routes work down different paths."
+        },
+        {
+          "id": "B",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "This is a related lesson concept (2.3.1 Mode one: Self review), but this card asks: When is a branching workflow appropriate?"
+        },
+        {
+          "id": "C",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "This is a related lesson concept (3.3.1 Pattern one: Pipeline), but this card asks: When is a branching workflow appropriate?"
+        },
+        {
+          "id": "D",
+          "text": "Verifiable criteria such as whether generated code executes correctly.",
+          "explanation": "This is a related lesson concept (7.3.1.2 Designing evaluation metrics: Objective and subjective), but this card asks: When is a branching workflow appropriate?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "When a condition or classification routes work down different paths.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3.2 Pattern two: Branching"
+        }
+      ]
+    },
+    {
+      "id": "Q15",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "When can workflow steps run in parallel?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Performance of individual internal components in a complex agent.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: When can workflow steps run in parallel?"
+        },
+        {
+          "id": "B",
+          "text": "When a task requires the agent to choose a sequence of actions from the user’s goal.",
+          "explanation": "This is a related lesson concept (4.3 Enabling agents to plan autonomously), but this card asks: When can workflow steps run in parallel?"
+        },
+        {
+          "id": "C",
+          "text": "When they are independent and do not need one another’s outputs.",
+          "explanation": "Correct: When they are independent and do not need one another’s outputs."
+        },
+        {
+          "id": "D",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "This is a related lesson concept (6.3.5 Building short-term and long-term memory systems), but this card asks: When can workflow steps run in parallel?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "When they are independent and do not need one another’s outputs.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3.3 Pattern three: Parallel execution"
+        }
+      ]
+    },
+    {
+      "id": "Q16",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a useful reason to include a human-in-the-loop step?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Performance of individual internal components in a complex agent.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: What is a useful reason to include a human-in-the-loop step?"
+        },
+        {
+          "id": "B",
+          "text": "It may not handle tasks whose next steps depend on unforeseen results.",
+          "explanation": "This is a related lesson concept (4.1 Limitations of fixed workflows), but this card asks: What is a useful reason to include a human-in-the-loop step?"
+        },
+        {
+          "id": "C",
+          "text": "A high-impact decision needs human review or approval.",
+          "explanation": "Correct: A high-impact decision needs human review or approval."
+        },
+        {
+          "id": "D",
+          "text": "Think, act, and observe the tool result before choosing the next step.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What is a useful reason to include a human-in-the-loop step?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "A high-impact decision needs human review or approval.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3.5 Pattern five: Human-in-the-loop (HITL)"
+        }
+      ]
+    },
+    {
+      "id": "Q17",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What should guide the choice of workflow pattern?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Component tests help locate the source of a failure in a complex workflow.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: What should guide the choice of workflow pattern?"
+        },
+        {
+          "id": "B",
+          "text": "Plans can contain invalid, unsafe, or infeasible actions.",
+          "explanation": "This is a related lesson concept (4.4 Executing agent-generated plans), but this card asks: What should guide the choice of workflow pattern?"
+        },
+        {
+          "id": "C",
+          "text": "Dependencies, complexity, efficiency needs, quality expectations, and risk tolerance.",
+          "explanation": "Correct: Dependencies, complexity, efficiency needs, quality expectations, and risk tolerance."
+        },
+        {
+          "id": "D",
+          "text": "The model may repeat its own unsupported assumptions without external evidence.",
+          "explanation": "This is a related lesson concept (2.3.1.3 Drawbacks of self-reflection), but this card asks: What should guide the choice of workflow pattern?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Dependencies, complexity, efficiency needs, quality expectations, and risk tolerance.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3.6 Choosing the right pattern"
+        }
+      ]
+    },
+    {
+      "id": "Q18",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a limitation of a fixed workflow?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Think, act, and observe the tool result before choosing the next step.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What is a limitation of a fixed workflow?"
+        },
+        {
+          "id": "B",
+          "text": "It may not handle tasks whose next steps depend on unforeseen results.",
+          "explanation": "Correct: It may not handle tasks whose next steps depend on unforeseen results."
+        },
+        {
+          "id": "C",
+          "text": "The model may repeat its own unsupported assumptions without external evidence.",
+          "explanation": "This is a related lesson concept (2.3.1.3 Drawbacks of self-reflection), but this card asks: What is a limitation of a fixed workflow?"
+        },
+        {
+          "id": "D",
+          "text": "Plans can contain invalid, unsafe, or infeasible actions.",
+          "explanation": "This is a related lesson concept (4.4 Executing agent-generated plans), but this card asks: What is a limitation of a fixed workflow?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "It may not handle tasks whose next steps depend on unforeseen results.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "4.1 Limitations of fixed workflows"
+        }
+      ]
+    },
+    {
+      "id": "Q19",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "When is autonomous planning useful?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When the operation is sensitive, high-impact, or outside an explicitly safe scope.",
+          "explanation": "This is a related lesson concept (3.3.5 Pattern five: Human-in-the-loop (HITL)), but this card asks: When is autonomous planning useful?"
+        },
+        {
+          "id": "B",
+          "text": "Evidence from a tool, test, or other independent validation source.",
+          "explanation": "This is a related lesson concept (2.3.2 Mode two: External feedback), but this card asks: When is autonomous planning useful?"
+        },
+        {
+          "id": "C",
+          "text": "When a task requires the agent to choose a sequence of actions from the user’s goal.",
+          "explanation": "Correct: When a task requires the agent to choose a sequence of actions from the user’s goal."
+        },
+        {
+          "id": "D",
+          "text": "No. The application parses, validates, and executes the requested function.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: When is autonomous planning useful?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "When a task requires the agent to choose a sequence of actions from the user’s goal.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "4.3 Enabling agents to plan autonomously"
+        }
+      ]
+    },
+    {
+      "id": "Q20",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why validate an agent-generated plan before execution?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The result can change the plan or indicate the task is already complete.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: Why validate an agent-generated plan before execution?"
+        },
+        {
+          "id": "B",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "This is a related lesson concept (3.3.1 Pattern one: Pipeline), but this card asks: Why validate an agent-generated plan before execution?"
+        },
+        {
+          "id": "C",
+          "text": "It may not handle tasks whose next steps depend on unforeseen results.",
+          "explanation": "This is a related lesson concept (4.1 Limitations of fixed workflows), but this card asks: Why validate an agent-generated plan before execution?"
+        },
+        {
+          "id": "D",
+          "text": "Plans can contain invalid, unsafe, or infeasible actions.",
+          "explanation": "Correct: Plans can contain invalid, unsafe, or infeasible actions."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Plans can contain invalid, unsafe, or infeasible actions.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "4.4 Executing agent-generated plans"
+        }
+      ]
+    },
+    {
+      "id": "Q21",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What can happen when a workflow contains too many dependent steps?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A summary updated over time to retain key information as raw history grows.",
+          "explanation": "This is a related lesson concept (6.3.2 Strategy two: Extracting key points – rolling summary), but this card asks: What can happen when a workflow contains too many dependent steps?"
+        },
+        {
+          "id": "B",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "This is a related lesson concept (2.3.1 Mode one: Self review), but this card asks: What can happen when a workflow contains too many dependent steps?"
+        },
+        {
+          "id": "C",
+          "text": "The result can change the plan or indicate the task is already complete.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What can happen when a workflow contains too many dependent steps?"
+        },
+        {
+          "id": "D",
+          "text": "Errors can cascade and compound through downstream stages.",
+          "explanation": "Correct: Errors can cascade and compound through downstream stages."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Errors can cascade and compound through downstream stages.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.2.2 Cascading error amplification"
+        }
+      ]
+    },
+    {
+      "id": "Q22",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is self-reflection in an agent workflow?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Errors can cascade and compound through downstream stages.",
+          "explanation": "This is a related lesson concept (3.2.2 Cascading error amplification), but this card asks: What is self-reflection in an agent workflow?"
+        },
+        {
+          "id": "B",
+          "text": "It makes the model’s intent and parameters easier for software to validate.",
+          "explanation": "This is a related lesson concept (1.3 Ensuring reliability: Structured output), but this card asks: What is self-reflection in an agent workflow?"
+        },
+        {
+          "id": "C",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "This is a related lesson concept (7.3.1 Evaluation method one: End-to-end evaluation), but this card asks: What is self-reflection in an agent workflow?"
+        },
+        {
+          "id": "D",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "Correct: The model reviews or critiques its own generated result."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "The model reviews or critiques its own generated result.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "2.3.1 Mode one: Self review"
+        }
+      ]
+    },
+    {
+      "id": "Q23",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a weakness of relying only on self-reflection?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The result can change the plan or indicate the task is already complete.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What is a weakness of relying only on self-reflection?"
+        },
+        {
+          "id": "B",
+          "text": "Guide the model, validate its output, and retry when appropriate.",
+          "explanation": "This is a related lesson concept (1.3.2 Building a \"guide-validate-retry\" closed loop), but this card asks: What is a weakness of relying only on self-reflection?"
+        },
+        {
+          "id": "C",
+          "text": "Retrieval of relevant stored facts beyond the immediate conversation window.",
+          "explanation": "This is a related lesson concept (6.3.3 Strategy three: Building a knowledge base – vector-based retrieval), but this card asks: What is a weakness of relying only on self-reflection?"
+        },
+        {
+          "id": "D",
+          "text": "The model may repeat its own unsupported assumptions without external evidence.",
+          "explanation": "Correct: The model may repeat its own unsupported assumptions without external evidence."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "The model may repeat its own unsupported assumptions without external evidence.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "2.3.1.3 Drawbacks of self-reflection"
+        }
+      ]
+    },
+    {
+      "id": "Q24",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is external feedback for agent reflection?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It makes the model’s intent and parameters easier for software to validate.",
+          "explanation": "This is a related lesson concept (1.3 Ensuring reliability: Structured output), but this card asks: What is external feedback for agent reflection?"
+        },
+        {
+          "id": "B",
+          "text": "When they are independent and do not need one another’s outputs.",
+          "explanation": "This is a related lesson concept (3.3.3 Pattern three: Parallel execution), but this card asks: What is external feedback for agent reflection?"
+        },
+        {
+          "id": "C",
+          "text": "Evidence from a tool, test, or other independent validation source.",
+          "explanation": "Correct: Evidence from a tool, test, or other independent validation source."
+        },
+        {
+          "id": "D",
+          "text": "Component tests help locate the source of a failure in a complex workflow.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: What is external feedback for agent reflection?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Evidence from a tool, test, or other independent validation source.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "2.3.2 Mode two: External feedback"
+        }
+      ]
+    },
+    {
+      "id": "Q25",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is fixed-window memory management?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tool providers from agent applications that consume those tools.",
+          "explanation": "This is a related lesson concept (1.5.2 Decoupling concept of MCP), but this card asks: What is fixed-window memory management?"
+        },
+        {
+          "id": "B",
+          "text": "Describe the function name, purpose, and structured input parameters to the model.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: What is fixed-window memory management?"
+        },
+        {
+          "id": "C",
+          "text": "Keeping a limited recent portion of conversation history and dropping older turns.",
+          "explanation": "Correct: Keeping a limited recent portion of conversation history and dropping older turns."
+        },
+        {
+          "id": "D",
+          "text": "Component tests help locate the source of a failure in a complex workflow.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: What is fixed-window memory management?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Keeping a limited recent portion of conversation history and dropping older turns.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3.1 Strategy one: Simple \"forgetting\" – fixed window truncation"
+        }
+      ]
+    },
+    {
+      "id": "Q26",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a trade-off of fixed-window truncation?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "This is a related lesson concept (6.3.5 Building short-term and long-term memory systems), but this card asks: What is a trade-off of fixed-window truncation?"
+        },
+        {
+          "id": "B",
+          "text": "It is simple, but useful information from older turns can be lost.",
+          "explanation": "Correct: It is simple, but useful information from older turns can be lost."
+        },
+        {
+          "id": "C",
+          "text": "A high-impact decision needs human review or approval.",
+          "explanation": "This is a related lesson concept (3.3.5 Pattern five: Human-in-the-loop (HITL)), but this card asks: What is a trade-off of fixed-window truncation?"
+        },
+        {
+          "id": "D",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "This is a related lesson concept (7.3.1 Evaluation method one: End-to-end evaluation), but this card asks: What is a trade-off of fixed-window truncation?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "It is simple, but useful information from older turns can be lost.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3.1 Strategy one: Simple \"forgetting\" – fixed window truncation"
+        }
+      ]
+    },
+    {
+      "id": "Q27",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is rolling-summary memory?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "This is a related lesson concept (6.3.5 Building short-term and long-term memory systems), but this card asks: What is rolling-summary memory?"
+        },
+        {
+          "id": "B",
+          "text": "Details may be omitted or distorted during repeated summarization.",
+          "explanation": "This is a related lesson concept (6.3.2 Strategy two: Extracting key points – rolling summary), but this card asks: What is rolling-summary memory?"
+        },
+        {
+          "id": "C",
+          "text": "A summary updated over time to retain key information as raw history grows.",
+          "explanation": "Correct: A summary updated over time to retain key information as raw history grows."
+        },
+        {
+          "id": "D",
+          "text": "Think, act, and observe the tool result before choosing the next step.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What is rolling-summary memory?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "A summary updated over time to retain key information as raw history grows.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3.2 Strategy two: Extracting key points – rolling summary"
+        }
+      ]
+    },
+    {
+      "id": "Q28",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What is a risk of relying only on a rolling summary?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model may repeat its own unsupported assumptions without external evidence.",
+          "explanation": "This is a related lesson concept (2.3.1.3 Drawbacks of self-reflection), but this card asks: What is a risk of relying only on a rolling summary?"
+        },
+        {
+          "id": "B",
+          "text": "Describe the function name, purpose, and structured input parameters to the model.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: What is a risk of relying only on a rolling summary?"
+        },
+        {
+          "id": "C",
+          "text": "Plans can contain invalid, unsafe, or infeasible actions.",
+          "explanation": "This is a related lesson concept (4.4 Executing agent-generated plans), but this card asks: What is a risk of relying only on a rolling summary?"
+        },
+        {
+          "id": "D",
+          "text": "Details may be omitted or distorted during repeated summarization.",
+          "explanation": "Correct: Details may be omitted or distorted during repeated summarization."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Details may be omitted or distorted during repeated summarization.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3.2 Strategy two: Extracting key points – rolling summary"
+        }
+      ]
+    },
+    {
+      "id": "Q29",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does vector-based long-term memory provide?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The model reviews or critiques its own generated result.",
+          "explanation": "This is a related lesson concept (2.3.1 Mode one: Self review), but this card asks: What does vector-based long-term memory provide?"
+        },
+        {
+          "id": "B",
+          "text": "Describe the function name, purpose, and structured input parameters to the model.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: What does vector-based long-term memory provide?"
+        },
+        {
+          "id": "C",
+          "text": "Retrieval of relevant stored facts beyond the immediate conversation window.",
+          "explanation": "Correct: Retrieval of relevant stored facts beyond the immediate conversation window."
+        },
+        {
+          "id": "D",
+          "text": "The result can change the plan or indicate the task is already complete.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What does vector-based long-term memory provide?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Retrieval of relevant stored facts beyond the immediate conversation window.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3.3 Strategy three: Building a knowledge base – vector-based retrieval"
+        }
+      ]
+    },
+    {
+      "id": "Q30",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Why separate short-term and long-term agent memory?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A summary updated over time to retain key information as raw history grows.",
+          "explanation": "This is a related lesson concept (6.3.2 Strategy two: Extracting key points – rolling summary), but this card asks: Why separate short-term and long-term agent memory?"
+        },
+        {
+          "id": "B",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "Correct: Recent interaction context and persistent knowledge have different retention and retrieval needs."
+        },
+        {
+          "id": "C",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "This is a related lesson concept (3.3.1 Pattern one: Pipeline), but this card asks: Why separate short-term and long-term agent memory?"
+        },
+        {
+          "id": "D",
+          "text": "When a condition or classification routes work down different paths.",
+          "explanation": "This is a related lesson concept (3.3.2 Pattern two: Branching), but this card asks: Why separate short-term and long-term agent memory?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "6.3.5 Building short-term and long-term memory systems"
+        }
+      ]
+    },
+    {
+      "id": "Q31",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does end-to-end evaluation measure?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When later steps depend on results produced by earlier steps.",
+          "explanation": "This is a related lesson concept (3.3.1 Pattern one: Pipeline), but this card asks: What does end-to-end evaluation measure?"
+        },
+        {
+          "id": "B",
+          "text": "No. The application parses, validates, and executes the requested function.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: What does end-to-end evaluation measure?"
+        },
+        {
+          "id": "C",
+          "text": "Send its result back as a tool message so the model can continue or answer.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: What does end-to-end evaluation measure?"
+        },
+        {
+          "id": "D",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "Correct: Whether the complete agent produces a useful final result for the user."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Whether the complete agent produces a useful final result for the user.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.1 Evaluation method one: End-to-end evaluation"
+        }
+      ]
+    },
+    {
+      "id": "Q32",
+      "section": "agents",
+      "difficulty": "application",
+      "type": "single",
+      "question": "What does white-box evaluation inspect?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When a task requires the agent to choose a sequence of actions from the user’s goal.",
+          "explanation": "This is a related lesson concept (4.3 Enabling agents to plan autonomously), but this card asks: What does white-box evaluation inspect?"
+        },
+        {
+          "id": "B",
+          "text": "It makes the model’s intent and parameters easier for software to validate.",
+          "explanation": "This is a related lesson concept (1.3 Ensuring reliability: Structured output), but this card asks: What does white-box evaluation inspect?"
+        },
+        {
+          "id": "C",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "This is a related lesson concept (7.3.1 Evaluation method one: End-to-end evaluation), but this card asks: What does white-box evaluation inspect?"
+        },
+        {
+          "id": "D",
+          "text": "Performance of individual internal components in a complex agent.",
+          "explanation": "Correct: Performance of individual internal components in a complex agent."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "Performance of individual internal components in a complex agent.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.2 Evaluation method two: White-box evaluation"
+        }
+      ]
+    },
+    {
+      "id": "Q33",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "Why evaluate individual components as well as final output?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Component tests help locate the source of a failure in a complex workflow.",
+          "explanation": "Correct: Component tests help locate the source of a failure in a complex workflow."
+        },
+        {
+          "id": "B",
+          "text": "No. The application parses, validates, and executes the requested function.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: Why evaluate individual components as well as final output?"
+        },
+        {
+          "id": "C",
+          "text": "Send its result back as a tool message so the model can continue or answer.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: Why evaluate individual components as well as final output?"
+        },
+        {
+          "id": "D",
+          "text": "The user’s intent and desired outcome.",
+          "explanation": "This is a related lesson concept (8.1 Everything starts with \"user intent\"), but this card asks: Why evaluate individual components as well as final output?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Component tests help locate the source of a failure in a complex workflow.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.2 Evaluation method two: White-box evaluation"
+        }
+      ]
+    },
+    {
+      "id": "Q34",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "How can an evaluation system develop when the project is new?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Start with an MVP, observe real errors, then turn important failures into criteria.",
+          "explanation": "Correct: Start with an MVP, observe real errors, then turn important failures into criteria."
+        },
+        {
+          "id": "B",
+          "text": "Details may be omitted or distorted during repeated summarization.",
+          "explanation": "This is a related lesson concept (6.3.2 Strategy two: Extracting key points – rolling summary), but this card asks: How can an evaluation system develop when the project is new?"
+        },
+        {
+          "id": "C",
+          "text": "Verifiable criteria such as whether generated code executes correctly.",
+          "explanation": "This is a related lesson concept (7.3.1.2 Designing evaluation metrics: Objective and subjective), but this card asks: How can an evaluation system develop when the project is new?"
+        },
+        {
+          "id": "D",
+          "text": "It is simple, but useful information from older turns can be lost.",
+          "explanation": "This is a related lesson concept (6.3.1 Strategy one: Simple \"forgetting\" – fixed window truncation), but this card asks: How can an evaluation system develop when the project is new?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Start with an MVP, observe real errors, then turn important failures into criteria.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.1.1 Iterative establishment of evaluation criteria"
+        }
+      ]
+    },
+    {
+      "id": "Q35",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What are objective evaluation metrics suited to?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When the operation is sensitive, high-impact, or outside an explicitly safe scope.",
+          "explanation": "This is a related lesson concept (3.3.5 Pattern five: Human-in-the-loop (HITL)), but this card asks: What are objective evaluation metrics suited to?"
+        },
+        {
+          "id": "B",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "This is a related lesson concept (7.3.1 Evaluation method one: End-to-end evaluation), but this card asks: What are objective evaluation metrics suited to?"
+        },
+        {
+          "id": "C",
+          "text": "Verifiable criteria such as whether generated code executes correctly.",
+          "explanation": "Correct: Verifiable criteria such as whether generated code executes correctly."
+        },
+        {
+          "id": "D",
+          "text": "Guide the model, validate its output, and retry when appropriate.",
+          "explanation": "This is a related lesson concept (1.3.2 Building a \"guide-validate-retry\" closed loop), but this card asks: What are objective evaluation metrics suited to?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "Verifiable criteria such as whether generated code executes correctly.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.1.2 Designing evaluation metrics: Objective and subjective"
+        }
+      ]
+    },
+    {
+      "id": "Q36",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "Why make subjective evaluation criteria explicit?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Clear rubrics improve consistency between evaluators and iterations.",
+          "explanation": "Correct: Clear rubrics improve consistency between evaluators and iterations."
+        },
+        {
+          "id": "B",
+          "text": "Retrieval of relevant stored facts beyond the immediate conversation window.",
+          "explanation": "This is a related lesson concept (6.3.3 Strategy three: Building a knowledge base – vector-based retrieval), but this card asks: Why make subjective evaluation criteria explicit?"
+        },
+        {
+          "id": "C",
+          "text": "No. The application parses, validates, and executes the requested function.",
+          "explanation": "This is a related lesson concept (1.4.1 How function calling works), but this card asks: Why make subjective evaluation criteria explicit?"
+        },
+        {
+          "id": "D",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "This is a related lesson concept (7.3.1 Evaluation method one: End-to-end evaluation), but this card asks: Why make subjective evaluation criteria explicit?"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "takeaway": "Clear rubrics improve consistency between evaluators and iterations.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "7.3.1.3 Improving the stability of subjective evaluation"
+        }
+      ]
+    },
+    {
+      "id": "Q37",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What should an agent’s plan start from?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Think, act, and observe the tool result before choosing the next step.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: What should an agent’s plan start from?"
+        },
+        {
+          "id": "B",
+          "text": "Recent interaction context and persistent knowledge have different retention and retrieval needs.",
+          "explanation": "This is a related lesson concept (6.3.5 Building short-term and long-term memory systems), but this card asks: What should an agent’s plan start from?"
+        },
+        {
+          "id": "C",
+          "text": "It makes the model’s intent and parameters easier for software to validate.",
+          "explanation": "This is a related lesson concept (1.3 Ensuring reliability: Structured output), but this card asks: What should an agent’s plan start from?"
+        },
+        {
+          "id": "D",
+          "text": "The user’s intent and desired outcome.",
+          "explanation": "Correct: The user’s intent and desired outcome."
+        }
+      ],
+      "correct": [
+        "D"
+      ],
+      "takeaway": "The user’s intent and desired outcome.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "8.1 Everything starts with \"user intent\""
+        }
+      ]
+    },
+    {
+      "id": "Q38",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "What does context engineering aim to manage?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Performance of individual internal components in a complex agent.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: What does context engineering aim to manage?"
+        },
+        {
+          "id": "B",
+          "text": "The information, tools, and memory supplied to a model to complete a task.",
+          "explanation": "Correct: The information, tools, and memory supplied to a model to complete a task."
+        },
+        {
+          "id": "C",
+          "text": "It may not handle tasks whose next steps depend on unforeseen results.",
+          "explanation": "This is a related lesson concept (4.1 Limitations of fixed workflows), but this card asks: What does context engineering aim to manage?"
+        },
+        {
+          "id": "D",
+          "text": "Duplicated tool definitions and maintenance across separate agent applications.",
+          "explanation": "This is a related lesson concept (1.5.1 Challenges of tool reuse), but this card asks: What does context engineering aim to manage?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The information, tools, and memory supplied to a model to complete a task.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "8.2 Core methodology: Context engineering"
+        }
+      ]
+    },
+    {
+      "id": "Q39",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "Why should an agent observe a tool result before deciding its next action?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Whether the complete agent produces a useful final result for the user.",
+          "explanation": "This is a related lesson concept (7.3.1 Evaluation method one: End-to-end evaluation), but this card asks: Why should an agent observe a tool result before deciding its next action?"
+        },
+        {
+          "id": "B",
+          "text": "The result can change the plan or indicate the task is already complete.",
+          "explanation": "Correct: The result can change the plan or indicate the task is already complete."
+        },
+        {
+          "id": "C",
+          "text": "When a condition or classification routes work down different paths.",
+          "explanation": "This is a related lesson concept (3.3.2 Pattern two: Branching), but this card asks: Why should an agent observe a tool result before deciding its next action?"
+        },
+        {
+          "id": "D",
+          "text": "Clear rubrics improve consistency between evaluators and iterations.",
+          "explanation": "This is a related lesson concept (7.3.1.3 Improving the stability of subjective evaluation), but this card asks: Why should an agent observe a tool result before deciding its next action?"
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "takeaway": "The result can change the plan or indicate the task is already complete.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "1.4.2 ReAct pattern: Think-act-observe"
+        }
+      ]
+    },
+    {
+      "id": "Q40",
+      "section": "agents",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "When should a system request human approval before an agent action?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The result can change the plan or indicate the task is already complete.",
+          "explanation": "This is a related lesson concept (1.4.2 ReAct pattern: Think-act-observe), but this card asks: When should a system request human approval before an agent action?"
+        },
+        {
+          "id": "B",
+          "text": "Tool providers from agent applications that consume those tools.",
+          "explanation": "This is a related lesson concept (1.5.2 Decoupling concept of MCP), but this card asks: When should a system request human approval before an agent action?"
+        },
+        {
+          "id": "C",
+          "text": "When the operation is sensitive, high-impact, or outside an explicitly safe scope.",
+          "explanation": "Correct: When the operation is sensitive, high-impact, or outside an explicitly safe scope."
+        },
+        {
+          "id": "D",
+          "text": "Component tests help locate the source of a failure in a complex workflow.",
+          "explanation": "This is a related lesson concept (7.3.2 Evaluation method two: White-box evaluation), but this card asks: When should a system request human approval before an agent action?"
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "takeaway": "When the operation is sensitive, high-impact, or outside an explicitly safe scope.",
+      "sources": [
+        {
+          "file": "2_6_Building_an_Agent_to_Accomplish_Complex_Tasks.ipynb",
+          "heading": "3.3.5 Pattern five: Human-in-the-loop (HITL)"
+        }
+      ]
+    }
+  ],
+  "section": {
+    "id": "agents",
+    "title": "AI Agent and Applications",
+    "previousScore": 65,
+    "target": 40
+  }
+}
