@@ -1,1577 +1,343 @@
 {
-  "version": 1,
+  "version": 2,
+  "section": "development",
   "title": "LLM Application Development",
   "questions": [
     {
-      "id": "Q01",
+      "id": "DEV-01",
       "section": "development",
       "difficulty": "foundational",
       "type": "single",
-      "question": "In the lesson’s chat API example, which message role supplies the assistant’s persistent role and task instructions?",
+      "question": "You are building an internal Q&A assistant named Alex with the OpenAI-compatible SDK and Qwen-Max. You want every reply to stay in character as a helpful assistant for an educational content company, regardless of what employees ask. Where should this persona and task description be placed?",
       "options": [
-        {
-          "id": "A",
-          "text": "user",
-          "explanation": "The user role carries the request being answered, rather than the application’s role instructions."
-        },
-        {
-          "id": "B",
-          "text": "system",
-          "explanation": "The example places the assistant’s identity and responsibilities in a system message."
-        },
-        {
-          "id": "C",
-          "text": "assistant",
-          "explanation": "Assistant messages contain earlier model responses and help preserve conversation history."
-        },
-        {
-          "id": "D",
-          "text": "tool",
-          "explanation": "Tool messages carry execution results back to a model during tool use."
-        }
+        {"id": "A", "text": "In a message with role \"assistant\" placed at the start of the messages list", "explanation": "The assistant role holds the model's own previous replies in the conversation history; it is not the slot for setting the model's role and task."},
+        {"id": "B", "text": "Prepended to every user question inside the \"user\" message content", "explanation": "This mixes instructions with the employee's question. The lesson keeps the user message for the user's input and sets the role and task separately."},
+        {"id": "C", "text": "In a message with role \"system\" at the start of the messages list", "explanation": "The lesson's code comments state that the system message is used to set the role and task of the LLM, which is exactly how the Alex persona is defined."},
+        {"id": "D", "text": "In the model parameter, for example model=\"qwen-max-alex\"", "explanation": "The model parameter only selects which model to call (such as qwen-max); it does not carry persona instructions."}
       ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "Separate application instructions from user requests and previous assistant replies.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.4 Basic Conversation Call"
-        }
-      ]
+      "correct": ["C"],
+      "takeaway": "Use the system message to set the model's role and task; user messages carry the user's input.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "1.4 Basic Conversation Call"}]
     },
     {
-      "id": "Q02",
+      "id": "DEV-02",
       "section": "development",
-      "difficulty": "application",
+      "difficulty": "foundational",
       "type": "single",
-      "question": "A user asks which project tool the company uses, then asks “How do I get an account for it?” The second API request contains only the follow-up. Which change addresses the missing context?",
+      "question": "A developer is about to share a notebook that calls Model Studio. The current code contains the line api_key=\"sk-...\" with the full key in plain text. What approach does the course recommend for handling the key?",
       "options": [
-        {
-          "id": "A",
-          "text": "Increase temperature to encourage inference.",
-          "explanation": "More randomness cannot reliably recover omitted conversation history."
-        },
-        {
-          "id": "B",
-          "text": "Reuse the API key as the conversation identifier.",
-          "explanation": "An API key authenticates requests; it does not send the previous messages."
-        },
-        {
-          "id": "C",
-          "text": "Send relevant previous user and assistant messages with the follow-up.",
-          "explanation": "The messages list gives the model the earlier tool name and the follow-up together."
-        },
-        {
-          "id": "D",
-          "text": "Change the follow-up message role to system.",
-          "explanation": "Changing the role does not restore the missing referent."
-        }
+        {"id": "A", "text": "Store the key in an environment variable and read it in code, for example with os.getenv(\"DASHSCOPE_API_KEY\")", "explanation": "The course describes environment variables as the safer, more maintainable approach: the key is not exposed when code is shared, and rotation does not require editing plaintext references."},
+        {"id": "B", "text": "Keep the key in the source code but split it into several string fragments that are concatenated at runtime", "explanation": "The key is still present in the shared source and must still be edited manually on rotation, so the core risk remains."},
+        {"id": "C", "text": "Keep the key hardcoded but add a comment asking readers not to copy it", "explanation": "A comment does not prevent exposure; hardcoding is exactly what the course identifies as a security risk."},
+        {"id": "D", "text": "Print the full key at startup so the developer can confirm it was loaded correctly", "explanation": "The course's setup only displays the first five characters followed by asterisks, specifically so the configuration can be verified without exposing the full key."}
       ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Conversation continuity depends on the history included in each request.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
+      "correct": ["A"],
+      "takeaway": "Never hardcode API keys; load them from environment variables and mask them when displaying.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "1.3 Set API Key"}]
     },
     {
-      "id": "Q03",
+      "id": "DEV-03",
       "section": "development",
       "difficulty": "application",
       "type": "multiple",
-      "question": "The bot returns a complete answer after a long blank wait. Which statements correctly describe switching to streaming?",
+      "question": "An employee asks the bot \"What project management tools does our company use?\" and then follows up with \"How do I apply for an account for this tool?\" The bot answers the follow-up as if it has no idea which tool is meant. Which changes to the calling code are needed so the follow-up is understood?",
       "options": [
-        {
-          "id": "A",
-          "text": "The interface can display content as chunks arrive.",
-          "explanation": "Streaming exposes partial output before generation is complete."
-        },
-        {
-          "id": "B",
-          "text": "Streaming makes the model’s factual answers more accurate.",
-          "explanation": "The lesson distinguishes incremental delivery from answer quality."
-        },
-        {
-          "id": "C",
-          "text": "The client can keep reading only a single completed message object.",
-          "explanation": "The streaming example iterates over chunks and reads delta content."
-        },
-        {
-          "id": "D",
-          "text": "Streaming alone does not guarantee a shorter time to finish generating the whole answer.",
-          "explanation": "It improves perceived waiting by showing partial results; it does not inherently reduce the total generation work."
-        }
+        {"id": "A", "text": "After each call, append the model's reply to the history as a message with role \"assistant\"", "explanation": "The lesson appends each reply as an assistant message so it can be used in the next round; without it, the model never sees what tool it previously named."},
+        {"id": "B", "text": "Set temperature=0 so the model consistently remembers earlier turns", "explanation": "Temperature only reshapes the next-token probability distribution; it has no effect on whether earlier turns are available to the model."},
+        {"id": "C", "text": "Pass the complete conversation history list as the messages parameter on every call", "explanation": "The LLM generates responses based on all messages in the messages list, so the full history must be sent each time."},
+        {"id": "D", "text": "Send only the system message and the latest user question, relying on the server to keep track of earlier rounds", "explanation": "The lesson keeps context by resending the history in the messages list; sending only the latest question is exactly what causes the follow-up to lose its reference."},
+        {"id": "E", "text": "Append each new user question to the history list before making the call", "explanation": "The lesson adds the user question to conversation_history first and then calls the model with that list."}
       ],
-      "correct": [
-        "A",
-        "D"
-      ],
-      "takeaway": "Streaming changes delivery and perceived responsiveness; process the response incrementally.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
+      "correct": ["A", "C", "E"],
+      "takeaway": "Multi-round conversation works by keeping system, user and assistant messages in one list and sending the whole list each call.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "How Multi-Round Conversations Work"}]
     },
     {
-      "id": "Q04",
+      "id": "DEV-04",
       "section": "development",
       "difficulty": "challenging",
-      "type": "single",
-      "question": "After temperature scaling, candidate tokens have sorted probabilities 0.50, 0.25, 0.15, and 0.10. With top_p = 0.80, which candidate pool is retained under the lesson’s nucleus-sampling rule?",
+      "type": "multiple",
+      "question": "Your multi-round FAQ bot works in testing and is now going to production, where some employees hold very long conversations and expect to resume them the next day. Which considerations from the course apply?",
       "options": [
-        {
-          "id": "A",
-          "text": "Only the first token.",
-          "explanation": "Its cumulative probability is 0.50, below 0.80."
-        },
-        {
-          "id": "B",
-          "text": "The first two tokens.",
-          "explanation": "Their cumulative probability is 0.75, still below the threshold."
-        },
-        {
-          "id": "C",
-          "text": "The first three tokens.",
-          "explanation": "Their cumulative probability is 0.90: the smallest prefix that reaches or exceeds 0.80."
-        },
-        {
-          "id": "D",
-          "text": "All four tokens.",
-          "explanation": "The threshold is already reached by the first three tokens."
-        }
+        {"id": "A", "text": "Once the history is sent in the first call, the model retains it between requests, so later calls only need the newest message", "explanation": "The course's approach resends the full history in the messages list on every call; nothing in the lesson suggests the model retains it between requests."},
+        {"id": "B", "text": "Conversation history occupies space in the context window, so long histories may need to be truncated or summarized", "explanation": "This is one of the lesson's explicit tips for multi-round conversations."},
+        {"id": "C", "text": "Enabling stream=True compresses the history so it takes up less of the context window", "explanation": "Streaming only changes how the output is delivered; it does not alter how much input the history consumes."},
+        {"id": "D", "text": "History usually needs to be persistently stored, for example in a database, to support conversations across sessions", "explanation": "The lesson notes that production environments typically persist history to support continuous conversations across sessions."}
       ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "top_p retains the smallest high-probability prefix that reaches the cumulative threshold.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"
-        },
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.1 Temperature"
-        }
-      ]
+      "correct": ["B", "D"],
+      "takeaway": "Conversation history costs context-window space and must be persisted by the application for cross-session continuity.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "1.5 Multi-Round Conversations"}]
     },
     {
-      "id": "Q05",
+      "id": "DEV-05",
       "section": "development",
       "difficulty": "foundational",
       "type": "single",
-      "question": "When does a system message help in a chat-completions request?",
+      "question": "Users complain that the Q&A bot shows a blank screen for about 20 seconds before the whole answer appears at once. You add stream=True to the API call. What effect should you expect?",
       "options": [
-        {
-          "id": "A",
-          "text": "No; hardware and backend behavior can still prevent full determinism.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: When does a system message help in a chat-completions request?"
-        },
-        {
-          "id": "B",
-          "text": "It sets the assistant’s persistent role and task instructions.",
-          "explanation": "Correct: It sets the assistant’s persistent role and task instructions."
-        },
-        {
-          "id": "C",
-          "text": "The current user request or question.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: When does a system message help in a chat-completions request?"
-        },
-        {
-          "id": "D",
-          "text": "No. Distributed execution and other backend details may introduce variation.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: When does a system message help in a chat-completions request?"
-        }
+        {"id": "A", "text": "The model generates a shorter answer so the total time drops below a few seconds", "explanation": "Streaming does not shorten the answer; the same content is produced, just delivered progressively."},
+        {"id": "B", "text": "Answer quality improves slightly because the model can revise earlier tokens while streaming", "explanation": "The course states that streaming leaves the model's reasoning and the quality of the final answer unchanged."},
+        {"id": "C", "text": "The model switches to greedy decoding, so answers become fully deterministic", "explanation": "Streaming is unrelated to the decoding strategy; randomness is governed by parameters like temperature and top_p."},
+        {"id": "D", "text": "Content is sent incrementally as it is generated, so users see partial results immediately while the final answer stays the same", "explanation": "This matches the course: streaming changes only how content is displayed, improving user experience without changing the answer's quality."}
       ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "It sets the assistant’s persistent role and task instructions.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.4 Basic Conversation Call"
-        }
-      ]
+      "correct": ["D"],
+      "takeaway": "Streaming improves perceived latency by returning tokens as they are generated; it does not change the answer.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "1.6 Streaming Output"}]
     },
     {
-      "id": "Q06",
+      "id": "DEV-06",
+      "section": "development",
+      "difficulty": "application",
+      "type": "single",
+      "question": "You call client.chat.completions.create(model=\"qwen-max\", messages=msgs, stream=True) and iterate over the returned object with for chunk in response. Which expression gives the newly generated text in each chunk, as used in the course?",
+      "options": [
+        {"id": "A", "text": "chunk.choices[0].message.content", "explanation": "message.content is how the course reads the complete reply from a non-streaming response, not the incremental text in a stream chunk."},
+        {"id": "B", "text": "chunk.choices[0].delta.content", "explanation": "The course's streaming generator yields chunk.choices[0].delta.content for each chunk."},
+        {"id": "C", "text": "chunk.output.text", "explanation": "The course's OpenAI-compatible streaming code does not read an output.text field; it reads the delta of the first choice."},
+        {"id": "D", "text": "chunk.choices[0].usage", "explanation": "Usage is token accounting, not generated text; in the course's reasoning-model example it appears on a chunk whose choices list is empty."}
+      ],
+      "correct": ["B"],
+      "takeaway": "In streaming mode, read each chunk's choices[0].delta.content; in non-streaming mode, read choices[0].message.content.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "1.6 Streaming Output"}]
+    },
+    {
+      "id": "DEV-07",
+      "section": "development",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "During testing you ask Qwen-Max \"What tools should our company use for project management?\" twice. The two answers are worded differently, and both recommend generic tools such as Jira, Trello or Asana rather than the tools your company actually uses. Which explanations are consistent with the course?",
+      "options": [
+        {"id": "A", "text": "Using stream=True is what makes the wording differ between the two calls", "explanation": "Streaming only changes how output is displayed; the variation comes from how the next token is chosen."},
+        {"id": "B", "text": "Many online services use stochastic sampling decoding by default, so identical inputs can yield slightly different answers", "explanation": "The course attributes varying answers to stochastic sampling methods such as top-p and top-k being used by default."},
+        {"id": "C", "text": "The model has broad general knowledge but no access to your company's specific context, such as its current toolchain", "explanation": "The course notes that the model lacks company-specific context like the toolchain, team size or budget, so it falls back on commonly used tools."},
+        {"id": "D", "text": "The model is retrained between the two calls, so its knowledge changes from one request to the next", "explanation": "Nothing in the course suggests retraining between calls; differences come from sampling, and generic advice from missing private context."}
+      ],
+      "correct": ["B", "C"],
+      "takeaway": "Answers vary because of stochastic sampling, and they are generic because the model lacks private company knowledge.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "1.7 Observations and Considerations"}]
+    },
+    {
+      "id": "DEV-08",
       "section": "development",
       "difficulty": "foundational",
       "type": "single",
-      "question": "What does the user message contain in the basic API example?",
+      "question": "The course explains how an LLM turns the partial input \"ACP is a very\" into a full sentence. Which sequence correctly orders the stages of that text generation process?",
       "options": [
-        {
-          "id": "A",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "This is a related lesson concept (2.0 Project Background), but this card asks: What does the user message contain in the basic API example?"
-        },
-        {
-          "id": "B",
-          "text": "After testing each control individually, they may be combined for finer control.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What does the user message contain in the basic API example?"
-        },
-        {
-          "id": "C",
-          "text": "Restrict selection to a narrower, more probable candidate pool.",
-          "explanation": "This is a related lesson concept (2.2.2 top_p: Control the sampling range of the candidate token set), but this card asks: What does the user message contain in the basic API example?"
-        },
-        {
-          "id": "D",
-          "text": "The current user request or question.",
-          "explanation": "Correct: The current user request or question."
-        }
+        {"id": "A", "text": "Token Embedding, Tokenization, Model Inference, Output Text, Decoding & Autoregression", "explanation": "Embedding needs token IDs, so tokenization must come first; output text is produced only after decoding."},
+        {"id": "B", "text": "Tokenization, Model Inference, Token Embedding, Decoding & Autoregression, Output Text", "explanation": "Inference runs on the embedding vectors, so embedding must happen before model inference, not after."},
+        {"id": "C", "text": "Tokenization, Token Embedding, Model Inference, Decoding & Autoregression, Output Text", "explanation": "This is the five-stage order given in the course."},
+        {"id": "D", "text": "Tokenization, Token Embedding, Decoding & Autoregression, Model Inference, Output Text", "explanation": "Decoding needs the logits produced by model inference, so inference must come before decoding."}
       ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "The current user request or question.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.4 Basic Conversation Call"
-        }
-      ]
+      "correct": ["C"],
+      "takeaway": "Text generation goes: tokenization, embedding, model inference, decoding/autoregression, then output text.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.1. Text Generation Workflow"}]
     },
     {
-      "id": "Q07",
+      "id": "DEV-09",
       "section": "development",
       "difficulty": "foundational",
       "type": "single",
-      "question": "What two fields identify an ordinary chat message?",
+      "question": "While watching a streamed answer, a colleague notices that words sometimes appear in pieces and spaces show up at odd moments. Which description of tokens explains this?",
       "options": [
-        {
-          "id": "A",
-          "text": "Its speaker role and message content.",
-          "explanation": "Correct: Its speaker role and message content."
-        },
-        {
-          "id": "B",
-          "text": "Lower temperature, because it concentrates selection on more likely tokens.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What two fields identify an ordinary chat message?"
-        },
-        {
-          "id": "C",
-          "text": "Isolating each change makes its effect easier to understand.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What two fields identify an ordinary chat message?"
-        },
-        {
-          "id": "D",
-          "text": "No. Distributed execution and other backend details may introduce variation.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What two fields identify an ordinary chat message?"
-        }
+        {"id": "A", "text": "Each token is always one complete word, but the network delays some words more than others", "explanation": "The course states that tokens are not necessarily complete words, so the premise is wrong."},
+        {"id": "B", "text": "Tokens are usually sub-word or character fragments, each mapped to an integer ID, and spaces or punctuation can be encoded as tokens", "explanation": "This matches the course, which uses exactly this point to explain why streamed words can appear in chunks."},
+        {"id": "C", "text": "Tokens are fixed-length blocks of four characters, so word boundaries are ignored", "explanation": "The course describes tokens as sub-word or character fragments from a tokenizer vocabulary, not fixed-length blocks."},
+        {"id": "D", "text": "Each token ID encodes how important the word is, so higher IDs are sent first", "explanation": "The course points out that ID values are not inherently meaningful; ID 500 is not more important than ID 50."}
       ],
-      "correct": [
-        "A"
+      "correct": ["B"],
+      "takeaway": "Tokens are sub-word fragments with integer IDs, which is why streamed text can arrive mid-word.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.1. Text Generation Workflow"}]
+    },
+    {
+      "id": "DEV-10",
+      "section": "development",
+      "difficulty": "application",
+      "type": "single",
+      "question": "\"Dog chases cat\" and \"cat chases dog\" contain the same tokens but mean different things. According to the course, what in the token embedding stage allows the model to tell them apart?",
+      "options": [
+        {"id": "A", "text": "The tokenizer assigns larger IDs to tokens that appear later in the sentence", "explanation": "Token IDs come from the vocabulary and carry no order information; the course stresses that ID values are not inherently meaningful."},
+        {"id": "B", "text": "The embedding matrix stores a separate row for each word in each possible position", "explanation": "The embedding matrix is looked up by token ID only; order is supplied by a separate mechanism."},
+        {"id": "C", "text": "The temperature parameter weights earlier tokens more heavily than later ones", "explanation": "Temperature reshapes the output probability distribution during decoding; it has nothing to do with word order in the input."},
+        {"id": "D", "text": "Positional encoding is added to each token vector, because the standard transformer has no built-in sense of word order", "explanation": "The course explains that positional encoding must be added so the model can distinguish which word comes first, third, and so on."}
       ],
-      "takeaway": "Its speaker role and message content.",
+      "correct": ["D"],
+      "takeaway": "Embeddings capture meaning; positional encoding supplies word order the transformer otherwise lacks.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.1. Text Generation Workflow"}]
+    },
+    {
+      "id": "DEV-11",
+      "section": "development",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "During autoregressive generation, each newly chosen token is appended to the input and the model predicts again. Which conditions end this loop?",
+      "options": [
+        {"id": "A", "text": "A special End-of-Sequence (EOS) token is generated", "explanation": "The course lists generation of an EOS token, such as <|im_end|> for Qwen3, as a stopping condition."},
+        {"id": "B", "text": "The probability of the most likely candidate token falls below 50%", "explanation": "Low top-token probability just means a flatter distribution; the course does not list it as a reason to stop."},
+        {"id": "C", "text": "The cumulative probability of the candidate set reaches the top_p threshold", "explanation": "Reaching the top_p threshold defines the sampling candidate set for one token; it does not end generation."},
+        {"id": "D", "text": "The pre-set maximum generation length is reached", "explanation": "The course lists hitting the maximum generation length as a stopping condition."},
+        {"id": "E", "text": "A user-specified stop word sequence is generated", "explanation": "The course lists generation of a user-specified stop sequence as a stopping condition."}
+      ],
+      "correct": ["A", "D", "E"],
+      "takeaway": "Generation stops on an EOS token, the maximum length, or a user-defined stop sequence.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.1. Text Generation Workflow"}]
+    },
+    {
+      "id": "DEV-12",
+      "section": "development",
+      "difficulty": "application",
+      "type": "single",
+      "question": "Your team uses Qwen-Max to generate code snippets, and reviewers complain that results vary noticeably between runs for the same request. Following the course's recommendations, which adjustment is most appropriate?",
+      "options": [
+        {"id": "A", "text": "Lower the temperature, so the probability distribution concentrates on a few high-probability tokens", "explanation": "The course recommends a lower temperature for clear answers such as code generation, because it sharpens the distribution and makes output more deterministic."},
+        {"id": "B", "text": "Raise the temperature toward 1.9, so the model has more options to find the correct code", "explanation": "A higher temperature flattens the distribution and increases diversity, which makes run-to-run variation worse."},
+        {"id": "C", "text": "Enable stream=True, so tokens are fixed as soon as they are produced", "explanation": "Streaming only changes how content is displayed; it does not reduce sampling randomness."},
+        {"id": "D", "text": "Raise top_p to its maximum, so the model always considers every candidate token", "explanation": "A higher top_p broadens the candidate set and increases diversity; the course recommends lower top_p for code generation."}
+      ],
+      "correct": ["A"],
+      "takeaway": "For tasks needing clear, stable answers like code, lower the temperature (or top_p).",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.1 Temperature"}]
+    },
+    {
+      "id": "DEV-13",
+      "section": "development",
+      "difficulty": "challenging",
+      "type": "single",
+      "question": "For the next token after \"ACP is a very\", the model's candidates are: informative 50%, fun 25%, enlightening 20%, boring 5%. With top_p=0.7, which tokens form the candidate set from which the next token is sampled?",
+      "options": [
+        {"id": "A", "text": "informative only", "explanation": "informative alone reaches only 0.5, which is below 0.7. The set must be the smallest one whose cumulative probability is at least the threshold, so more tokens are needed."},
+        {"id": "B", "text": "informative and fun", "explanation": "Sorted by probability, the cumulative total is 0.5, then 0.75. Adding fun is the first point that reaches at least 0.7, so these two tokens form the set."},
+        {"id": "C", "text": "informative, fun and enlightening", "explanation": "The set would total 0.95, but top_p takes the smallest set that reaches the threshold, and 0.7 is already reached after fun."},
+        {"id": "D", "text": "All four tokens, with probabilities rescaled to 70% of their original values", "explanation": "top_p does not scale probabilities; it filters the sorted candidates down to the smallest set whose cumulative probability meets the threshold."}
+      ],
+      "correct": ["B"],
+      "takeaway": "top_p keeps the smallest set of top-ranked tokens whose cumulative probability is at least the threshold.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"}]
+    },
+    {
+      "id": "DEV-14",
+      "section": "development",
+      "difficulty": "challenging",
+      "type": "multiple",
+      "question": "A compliance team requires the FAQ bot to give the same answer whenever the same question is asked. You experiment with temperature, top_p and seed. Which statements about these settings are accurate according to the course?",
+      "options": [
+        {"id": "A", "text": "Setting temperature=0 together with a fixed seed guarantees identical output on every call", "explanation": "The course says that even with temperature 0, a very low top_p and the same seed, results may still differ because of factors like distributed systems or output optimization."},
+        {"id": "B", "text": "temperature=0 minimizes randomness but does not guarantee identical outputs every time", "explanation": "The course explicitly notes that temperature 0 minimizes randomness without guaranteeing identical outputs."},
+        {"id": "C", "text": "With the same seed, prompt and generation parameters, the model will typically produce identical outputs, though full determinism is not guaranteed", "explanation": "This matches the course's description of the seed parameter, including the caveat about hardware-level non-determinism."},
+        {"id": "D", "text": "An extremely low top_p such as 0.0001 theoretically selects only the highest-probability token, but slight randomness may remain in practice", "explanation": "The course says this setting makes output very stable, yet distributed systems and output adjustments can still introduce slight randomness."}
+      ],
+      "correct": ["B", "C", "D"],
+      "takeaway": "temperature, top_p and seed can greatly reduce randomness, but none of them guarantees bit-identical output.",
       "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.4 Basic Conversation Call"
-        }
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.3 Summary"},
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.1 Temperature"}
       ]
     },
     {
-      "id": "Q08",
+      "id": "DEV-15",
+      "section": "development",
+      "difficulty": "application",
+      "type": "single",
+      "question": "According to the parameter ranges given in the course for Qwen-Max, which configuration is valid?",
+      "options": [
+        {"id": "A", "text": "temperature=2.0, top_p=0.8", "explanation": "Qwen-Max's temperature range is [0, 2), so 2.0 itself is excluded."},
+        {"id": "B", "text": "temperature=0.7, top_p=0", "explanation": "Qwen-Max's top_p range is (0, 1], so 0 is excluded."},
+        {"id": "C", "text": "temperature=0.7, top_p=1.5", "explanation": "top_p is a cumulative-probability threshold with a range of (0, 1], so 1.5 is out of range."},
+        {"id": "D", "text": "temperature=1.9, top_p=1.0", "explanation": "1.9 is within [0, 2) and 1.0 is within (0, 1], so both values are valid; the course itself runs an experiment with temperature=1.9."}
+      ],
+      "correct": ["D"],
+      "takeaway": "For Qwen-Max, temperature is in [0, 2) with a default of 0.7, and top_p is in (0, 1] with a default of 0.8.",
+      "sources": [
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.1 Temperature"},
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"}
+      ]
+    },
+    {
+      "id": "DEV-16",
+      "section": "development",
+      "difficulty": "application",
+      "type": "multiple",
+      "question": "Alex is building a writing assistant. Every time he asks for an article on \"the development of artificial intelligence\", the generated articles are very similar to each other. Which parameter changes would help produce more varied content?",
+      "options": [
+        {"id": "A", "text": "Increase temperature, for example into the 0.7 to 0.9 range", "explanation": "The course attributes this lack of creativity to a temperature that is too low and suggests raising it to about 0.7 to 0.9."},
+        {"id": "B", "text": "Set top_p to 0.001", "explanation": "A very low top_p restricts sampling to almost only the top token, which makes output even more uniform."},
+        {"id": "C", "text": "Set top_k to 1", "explanation": "top_k=1 selects only the highest-probability token, which the course says produces stable output that lacks variation and creativity."},
+        {"id": "D", "text": "Fix the seed parameter to the same value on every request", "explanation": "A fixed seed with the same prompt and parameters is meant to make sampling reproducible, which works against variety."},
+        {"id": "E", "text": "Increase top_p, for example to 0.9", "explanation": "The course suggests top_p around 0.9 to expand the range of word selection, which increases diversity."}
+      ],
+      "correct": ["A", "E"],
+      "takeaway": "To increase variety, raise temperature and/or top_p; low top_p, top_k=1 or a fixed seed push toward sameness.",
+      "sources": [
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.3 Summary"},
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"}
+      ]
+    },
+    {
+      "id": "DEV-17",
       "section": "development",
       "difficulty": "foundational",
       "type": "single",
-      "question": "Why is the whole relevant message list sent in a follow-up turn?",
+      "question": "Besides temperature and top_p, Qwen series models support a top_k parameter. What happens when top_k is set to 1?",
       "options": [
-        {
-          "id": "A",
-          "text": "Each request is based on the messages and context actually supplied to it.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: Why is the whole relevant message list sent in a follow-up turn?"
-        },
-        {
-          "id": "B",
-          "text": "The user question plus retrieved reference context to generate an answer.",
-          "explanation": "This is a related lesson concept (3.2 Retrieval and generation phase), but this card asks: Why is the whole relevant message list sent in a follow-up turn?"
-        },
-        {
-          "id": "C",
-          "text": "After testing each control individually, they may be combined for finer control.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: Why is the whole relevant message list sent in a follow-up turn?"
-        },
-        {
-          "id": "D",
-          "text": "The model needs the conversation history to resolve references and maintain continuity.",
-          "explanation": "Correct: The model needs the conversation history to resolve references and maintain continuity."
-        }
+        {"id": "A", "text": "The model samples uniformly from all tokens in the vocabulary", "explanation": "top_k restricts selection to the k most probable tokens, so k=1 is the most restrictive case, not the broadest."},
+        {"id": "B", "text": "The model returns only one token and then stops generating", "explanation": "top_k controls how each next token is chosen, not how many tokens are generated in total."},
+        {"id": "C", "text": "The model only selects the highest-probability token, making output stable but lacking variation", "explanation": "This matches the course's description of top_k=1."},
+        {"id": "D", "text": "The model picks the single best candidate path using beam search with one beam per sentence", "explanation": "The course describes top_k as a sampling method over the k most probable tokens, not a beam-search setting."}
       ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "The model needs the conversation history to resolve references and maintain continuity.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
+      "correct": ["C"],
+      "takeaway": "top_k limits sampling to the k most probable tokens; top_k=1 always picks the most probable token.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.3 Summary"}]
     },
     {
-      "id": "Q09",
+      "id": "DEV-18",
       "section": "development",
       "difficulty": "foundational",
       "type": "single",
-      "question": "Which two conversational roles should generally be retained for multi-turn context?",
+      "question": "A new engineer is tuning the FAQ bot for the first time and wants to understand how temperature and top_p each affect the output. What approach does the course advise?",
       "options": [
-        {
-          "id": "A",
-          "text": "Make document information searchable so relevant passages can be provided to the model.",
-          "explanation": "This is a related lesson concept (3.1 Indexing phase), but this card asks: Which two conversational roles should generally be retained for multi-turn context?"
-        },
-        {
-          "id": "B",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "This is a related lesson concept (2.0 Project Background), but this card asks: Which two conversational roles should generally be retained for multi-turn context?"
-        },
-        {
-          "id": "C",
-          "text": "Isolating each change makes its effect easier to understand.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: Which two conversational roles should generally be retained for multi-turn context?"
-        },
-        {
-          "id": "D",
-          "text": "User questions and assistant responses, along with the system instruction.",
-          "explanation": "Correct: User questions and assistant responses, along with the system instruction."
-        }
+        {"id": "A", "text": "Adjust one parameter at a time to understand its individual effect, then combine them for finer control once familiar", "explanation": "The course recommends that beginners change one parameter at a time, while noting that the two are commonly used together in practice."},
+        {"id": "B", "text": "Never use temperature and top_p together, because they cancel each other out", "explanation": "The course says the two parameters are commonly used together in practice; they influence randomness in different ways rather than cancelling out."},
+        {"id": "C", "text": "Always set both to their maximum values first, then lower them together until the output looks acceptable", "explanation": "Changing both at once makes it hard to see each parameter's individual effect, which is what the course advises beginners to avoid."},
+        {"id": "D", "text": "Leave both parameters at their defaults and adjust only the seed parameter", "explanation": "The seed is for reproducibility; it does not replace temperature and top_p as the controls for creativity and consistency."}
       ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "User questions and assistant responses, along with the system instruction.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
+      "correct": ["A"],
+      "takeaway": "When learning, change temperature or top_p one at a time; combine them later for fine control.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "2.2.3 Summary"}]
     },
     {
-      "id": "Q10",
-      "section": "development",
-      "difficulty": "foundational",
-      "type": "single",
-      "question": "What practical limit grows as conversation history gets longer?",
-      "options": [
-        {
-          "id": "A",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "This is a related lesson concept (2.0 Project Background), but this card asks: What practical limit grows as conversation history gets longer?"
-        },
-        {
-          "id": "B",
-          "text": "The streamed choice’s delta content.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What practical limit grows as conversation history gets longer?"
-        },
-        {
-          "id": "C",
-          "text": "The history consumes the model’s context window.",
-          "explanation": "Correct: The history consumes the model’s context window."
-        },
-        {
-          "id": "D",
-          "text": "A probability distribution over candidates for the next token.",
-          "explanation": "This is a related lesson concept (2.1. Text Generation Workflow), but this card asks: What practical limit grows as conversation history gets longer?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "The history consumes the model’s context window.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
-    },
-    {
-      "id": "Q11",
-      "section": "development",
-      "difficulty": "foundational",
-      "type": "single",
-      "question": "What can an application do when old chat history no longer fits?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Lower temperature, because it concentrates selection on more likely tokens.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What can an application do when old chat history no longer fits?"
-        },
-        {
-          "id": "B",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "This is a related lesson concept (2.0 Project Background), but this card asks: What can an application do when old chat history no longer fits?"
-        },
-        {
-          "id": "C",
-          "text": "Truncate less useful turns or summarize prior conversation.",
-          "explanation": "Correct: Truncate less useful turns or summarize prior conversation."
-        },
-        {
-          "id": "D",
-          "text": "The system message supplied with the API request.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: What can an application do when old chat history no longer fits?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Truncate less useful turns or summarize prior conversation.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
-    },
-    {
-      "id": "Q12",
-      "section": "development",
-      "difficulty": "foundational",
-      "type": "single",
-      "question": "What enables a user to continue a chat across sessions?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Persisting conversation history in an application store such as a database.",
-          "explanation": "Correct: Persisting conversation history in an application store such as a database."
-        },
-        {
-          "id": "B",
-          "text": "Partial response text can appear as it is generated.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What enables a user to continue a chat across sessions?"
-        },
-        {
-          "id": "C",
-          "text": "The history consumes the model’s context window.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What enables a user to continue a chat across sessions?"
-        },
-        {
-          "id": "D",
-          "text": "The smallest high-probability token prefix whose cumulative probability reaches the threshold.",
-          "explanation": "This is a related lesson concept (2.2.2 top_p: Control the sampling range of the candidate token set), but this card asks: What enables a user to continue a chat across sessions?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "Persisting conversation history in an application store such as a database.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
-    },
-    {
-      "id": "Q13",
+      "id": "DEV-19",
       "section": "development",
       "difficulty": "application",
-      "type": "single",
-      "question": "What parameter enables streaming in the lesson’s API call?",
+      "type": "multiple",
+      "question": "To let the bot answer company-specific questions, a developer pastes the entire employee document library into the system prompt of every request. Which problems does the course associate with this approach?",
       "options": [
-        {
-          "id": "A",
-          "text": "No. Distributed execution and other backend details may introduce variation.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What parameter enables streaming in the lesson’s API call?"
-        },
-        {
-          "id": "B",
-          "text": "How concentrated or spread the next-token selection probabilities are.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What parameter enables streaming in the lesson’s API call?"
-        },
-        {
-          "id": "C",
-          "text": "Set stream=True and consume the response incrementally.",
-          "explanation": "Correct: Set stream=True and consume the response incrementally."
-        },
-        {
-          "id": "D",
-          "text": "Restrict selection to a narrower, more probable candidate pool.",
-          "explanation": "This is a related lesson concept (2.2.2 top_p: Control the sampling range of the candidate token set), but this card asks: What parameter enables streaming in the lesson’s API call?"
-        }
+        {"id": "A", "text": "The model's weights are updated with the document library, so its general knowledge gradually degrades", "explanation": "Putting knowledge in the prompt involves no model changes; updating weights is what fine-tuning or training does."},
+        {"id": "B", "text": "Long system prompts force temperature to 0, which removes all variation from answers", "explanation": "Prompt length has no effect on the temperature setting; the course does not describe any such interaction."},
+        {"id": "C", "text": "The input may exceed token limits, preventing the model from generating a response", "explanation": "The course warns that large background data can exceed token limits so that no response is generated."},
+        {"id": "D", "text": "Overly long inputs can reduce model efficiency", "explanation": "The course notes that introducing large amounts of background data can reduce model efficiency."}
       ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Set stream=True and consume the response incrementally.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
+      "correct": ["C", "D"],
+      "takeaway": "Putting knowledge in the prompt is cheap, but prompts have length limits; RAG retrieves only the relevant snippets instead.",
+      "sources": [{"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "⚙️ 3. Enable LLMs to answer private knowledge questions"}]
     },
     {
-      "id": "Q14",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Which response field contains incremental generated text in the example?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Its speaker role and message content.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: Which response field contains incremental generated text in the example?"
-        },
-        {
-          "id": "B",
-          "text": "Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: Which response field contains incremental generated text in the example?"
-        },
-        {
-          "id": "C",
-          "text": "The streamed choice’s delta content.",
-          "explanation": "Correct: The streamed choice’s delta content."
-        },
-        {
-          "id": "D",
-          "text": "The system message defines application behavior; the user message carries the current request.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: Which response field contains incremental generated text in the example?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "The streamed choice’s delta content.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
-    },
-    {
-      "id": "Q15",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What changes for the user when streaming is enabled?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Searchable representations of document chunks, commonly embeddings in a vector store.",
-          "explanation": "This is a related lesson concept (3.1 Indexing phase), but this card asks: What changes for the user when streaming is enabled?"
-        },
-        {
-          "id": "B",
-          "text": "After testing each control individually, they may be combined for finer control.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What changes for the user when streaming is enabled?"
-        },
-        {
-          "id": "C",
-          "text": "Partial response text can appear as it is generated.",
-          "explanation": "Correct: Partial response text can appear as it is generated."
-        },
-        {
-          "id": "D",
-          "text": "The current user request or question.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: What changes for the user when streaming is enabled?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Partial response text can appear as it is generated.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
-    },
-    {
-      "id": "Q16",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Does streaming itself improve the model’s final answer quality?",
-      "options": [
-        {
-          "id": "A",
-          "text": "No. It changes how output is delivered, not the model’s reasoning or final quality.",
-          "explanation": "Correct: No. It changes how output is delivered, not the model’s reasoning or final quality."
-        },
-        {
-          "id": "B",
-          "text": "The user question plus retrieved reference context to generate an answer.",
-          "explanation": "This is a related lesson concept (3.2 Retrieval and generation phase), but this card asks: Does streaming itself improve the model’s final answer quality?"
-        },
-        {
-          "id": "C",
-          "text": "The current user request or question.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: Does streaming itself improve the model’s final answer quality?"
-        },
-        {
-          "id": "D",
-          "text": "A probability distribution over candidates for the next token.",
-          "explanation": "This is a related lesson concept (2.1. Text Generation Workflow), but this card asks: Does streaming itself improve the model’s final answer quality?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "No. It changes how output is delivered, not the model’s reasoning or final quality.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
-    },
-    {
-      "id": "Q17",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "How does temperature affect the candidate token distribution?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Higher temperature flattens the distribution and generally increases output variety.",
-          "explanation": "Correct: Higher temperature flattens the distribution and generally increases output variety."
-        },
-        {
-          "id": "B",
-          "text": "Persisting conversation history in an application store such as a database.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: How does temperature affect the candidate token distribution?"
-        },
-        {
-          "id": "C",
-          "text": "Each request is based on the messages and context actually supplied to it.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: How does temperature affect the candidate token distribution?"
-        },
-        {
-          "id": "D",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "This is a related lesson concept (2.0 Project Background), but this card asks: How does temperature affect the candidate token distribution?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "Higher temperature flattens the distribution and generally increases output variety.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.1 Temperature"
-        }
-      ]
-    },
-    {
-      "id": "Q18",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Which temperature direction suits clear factual answers?",
-      "options": [
-        {
-          "id": "A",
-          "text": "A probability distribution over candidates for the next token.",
-          "explanation": "This is a related lesson concept (2.1. Text Generation Workflow), but this card asks: Which temperature direction suits clear factual answers?"
-        },
-        {
-          "id": "B",
-          "text": "The streamed choice’s delta content.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: Which temperature direction suits clear factual answers?"
-        },
-        {
-          "id": "C",
-          "text": "The history consumes the model’s context window.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: Which temperature direction suits clear factual answers?"
-        },
-        {
-          "id": "D",
-          "text": "Lower temperature, because it concentrates selection on more likely tokens.",
-          "explanation": "Correct: Lower temperature, because it concentrates selection on more likely tokens."
-        }
-      ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "Lower temperature, because it concentrates selection on more likely tokens.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.1 Temperature"
-        }
-      ]
-    },
-    {
-      "id": "Q19",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Which temperature direction suits creative idea generation?",
-      "options": [
-        {
-          "id": "A",
-          "text": "After testing each control individually, they may be combined for finer control.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: Which temperature direction suits creative idea generation?"
-        },
-        {
-          "id": "B",
-          "text": "Higher temperature, because it allows more varied candidates.",
-          "explanation": "Correct: Higher temperature, because it allows more varied candidates."
-        },
-        {
-          "id": "C",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "This is a related lesson concept (2.0 Project Background), but this card asks: Which temperature direction suits creative idea generation?"
-        },
-        {
-          "id": "D",
-          "text": "No; hardware and backend behavior can still prevent full determinism.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: Which temperature direction suits creative idea generation?"
-        }
-      ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "Higher temperature, because it allows more varied candidates.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.1 Temperature"
-        }
-      ]
-    },
-    {
-      "id": "Q20",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Does temperature zero guarantee identical responses on every request?",
-      "options": [
-        {
-          "id": "A",
-          "text": "No. Distributed execution and other backend details may introduce variation.",
-          "explanation": "Correct: No. Distributed execution and other backend details may introduce variation."
-        },
-        {
-          "id": "B",
-          "text": "A sequence of chunks that the client can render incrementally.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: Does temperature zero guarantee identical responses on every request?"
-        },
-        {
-          "id": "C",
-          "text": "Its speaker role and message content.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: Does temperature zero guarantee identical responses on every request?"
-        },
-        {
-          "id": "D",
-          "text": "It can exceed the context window and increase input-token costs.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: Does temperature zero guarantee identical responses on every request?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "No. Distributed execution and other backend details may introduce variation.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.1 Temperature"
-        }
-      ]
-    },
-    {
-      "id": "Q21",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What does nucleus sampling use top_p to select?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Isolating each change makes its effect easier to understand.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What does nucleus sampling use top_p to select?"
-        },
-        {
-          "id": "B",
-          "text": "No. It changes how output is delivered, not the model’s reasoning or final quality.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What does nucleus sampling use top_p to select?"
-        },
-        {
-          "id": "C",
-          "text": "The smallest high-probability token prefix whose cumulative probability reaches the threshold.",
-          "explanation": "Correct: The smallest high-probability token prefix whose cumulative probability reaches the threshold."
-        },
-        {
-          "id": "D",
-          "text": "The history consumes the model’s context window.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does nucleus sampling use top_p to select?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "The smallest high-probability token prefix whose cumulative probability reaches the threshold.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"
-        }
-      ]
-    },
-    {
-      "id": "Q22",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What usually happens to the candidate pool when top_p increases?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Isolating each change makes its effect easier to understand.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What usually happens to the candidate pool when top_p increases?"
-        },
-        {
-          "id": "B",
-          "text": "The history consumes the model’s context window.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What usually happens to the candidate pool when top_p increases?"
-        },
-        {
-          "id": "C",
-          "text": "Make document information searchable so relevant passages can be provided to the model.",
-          "explanation": "This is a related lesson concept (3.1 Indexing phase), but this card asks: What usually happens to the candidate pool when top_p increases?"
-        },
-        {
-          "id": "D",
-          "text": "The pool broadens, which can increase response diversity.",
-          "explanation": "Correct: The pool broadens, which can increase response diversity."
-        }
-      ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "The pool broadens, which can increase response diversity.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"
-        }
-      ]
-    },
-    {
-      "id": "Q23",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Why adjust temperature and top_p one at a time during initial experiments?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Higher temperature flattens the distribution and generally increases output variety.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: Why adjust temperature and top_p one at a time during initial experiments?"
-        },
-        {
-          "id": "B",
-          "text": "User questions and assistant responses, along with the system instruction.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: Why adjust temperature and top_p one at a time during initial experiments?"
-        },
-        {
-          "id": "C",
-          "text": "Truncate less useful turns or summarize prior conversation.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: Why adjust temperature and top_p one at a time during initial experiments?"
-        },
-        {
-          "id": "D",
-          "text": "Isolating each change makes its effect easier to understand.",
-          "explanation": "Correct: Isolating each change makes its effect easier to understand."
-        }
-      ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "Isolating each change makes its effect easier to understand.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.3 Summary"
-        }
-      ]
-    },
-    {
-      "id": "Q24",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What does a fixed seed help reproduce?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism.",
-          "explanation": "Correct: Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism."
-        },
-        {
-          "id": "B",
-          "text": "Each request is based on the messages and context actually supplied to it.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does a fixed seed help reproduce?"
-        },
-        {
-          "id": "C",
-          "text": "How concentrated or spread the next-token selection probabilities are.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What does a fixed seed help reproduce?"
-        },
-        {
-          "id": "D",
-          "text": "Searchable representations of document chunks, commonly embeddings in a vector store.",
-          "explanation": "This is a related lesson concept (3.1 Indexing phase), but this card asks: What does a fixed seed help reproduce?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.3 Summary"
-        }
-      ]
-    },
-    {
-      "id": "Q25",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What is the purpose of indexing private documents for a Q&A application?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Make document information searchable so relevant passages can be provided to the model.",
-          "explanation": "Correct: Make document information searchable so relevant passages can be provided to the model."
-        },
-        {
-          "id": "B",
-          "text": "A sequence of chunks that the client can render incrementally.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What is the purpose of indexing private documents for a Q&A application?"
-        },
-        {
-          "id": "C",
-          "text": "Truncate less useful turns or summarize prior conversation.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What is the purpose of indexing private documents for a Q&A application?"
-        },
-        {
-          "id": "D",
-          "text": "Higher temperature flattens the distribution and generally increases output variety.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What is the purpose of indexing private documents for a Q&A application?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "Make document information searchable so relevant passages can be provided to the model.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "3.1 Indexing phase"
-        }
-      ]
-    },
-    {
-      "id": "Q26",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What does the model use after the retriever finds relevant material?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Partial response text can appear as it is generated.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What does the model use after the retriever finds relevant material?"
-        },
-        {
-          "id": "B",
-          "text": "Truncate less useful turns or summarize prior conversation.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does the model use after the retriever finds relevant material?"
-        },
-        {
-          "id": "C",
-          "text": "The user question plus retrieved reference context to generate an answer.",
-          "explanation": "Correct: The user question plus retrieved reference context to generate an answer."
-        },
-        {
-          "id": "D",
-          "text": "The model needs the conversation history to resolve references and maintain continuity.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does the model use after the retriever finds relevant material?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "The user question plus retrieved reference context to generate an answer.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "3.2 Retrieval and generation phase"
-        }
-      ]
-    },
-    {
-      "id": "Q27",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Why might an LLM Q&A bot outperform manually maintained FAQ pairs on paraphrased questions?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Its speaker role and message content.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: Why might an LLM Q&A bot outperform manually maintained FAQ pairs on paraphrased questions?"
-        },
-        {
-          "id": "B",
-          "text": "Text arrives incrementally, so each chunk must be read and displayed.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: Why might an LLM Q&A bot outperform manually maintained FAQ pairs on paraphrased questions?"
-        },
-        {
-          "id": "C",
-          "text": "Partial response text can appear as it is generated.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: Why might an LLM Q&A bot outperform manually maintained FAQ pairs on paraphrased questions?"
-        },
-        {
-          "id": "D",
-          "text": "It can interpret natural-language requests and answer from a shared knowledge base.",
-          "explanation": "Correct: It can interpret natural-language requests and answer from a shared knowledge base."
-        }
-      ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "It can interpret natural-language requests and answer from a shared knowledge base.",
-      "sources": [
-        {
-          "file": "2_0_Project_Background.ipynb",
-          "heading": "2.0 Project Background"
-        }
-      ]
-    },
-    {
-      "id": "Q28",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What should an application do when retrieved context is insufficient?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Restrict selection to a narrower, more probable candidate pool.",
-          "explanation": "This is a related lesson concept (2.2.2 top_p: Control the sampling range of the candidate token set), but this card asks: What should an application do when retrieved context is insufficient?"
-        },
-        {
-          "id": "B",
-          "text": "The model needs the conversation history to resolve references and maintain continuity.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What should an application do when retrieved context is insufficient?"
-        },
-        {
-          "id": "C",
-          "text": "Instruct the model to say the evidence is insufficient instead of fabricating an answer.",
-          "explanation": "Correct: Instruct the model to say the evidence is insufficient instead of fabricating an answer."
-        },
-        {
-          "id": "D",
-          "text": "No. It changes how output is delivered, not the model’s reasoning or final quality.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What should an application do when retrieved context is insufficient?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Instruct the model to say the evidence is insufficient instead of fabricating an answer.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "3.2 Retrieval and generation phase"
-        }
-      ]
-    },
-    {
-      "id": "Q29",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What controls whether the assistant knows its application role before the first user turn?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Persisting conversation history in an application store such as a database.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What controls whether the assistant knows its application role before the first user turn?"
-        },
-        {
-          "id": "B",
-          "text": "The system message supplied with the API request.",
-          "explanation": "Correct: The system message supplied with the API request."
-        },
-        {
-          "id": "C",
-          "text": "Truncate less useful turns or summarize prior conversation.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What controls whether the assistant knows its application role before the first user turn?"
-        },
-        {
-          "id": "D",
-          "text": "Its speaker role and message content.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: What controls whether the assistant knows its application role before the first user turn?"
-        }
-      ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "The system message supplied with the API request.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.4 Basic Conversation Call"
-        }
-      ]
-    },
-    {
-      "id": "Q30",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What does stream=True return instead of a single completed response?",
-      "options": [
-        {
-          "id": "A",
-          "text": "It sets the assistant’s persistent role and task instructions.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: What does stream=True return instead of a single completed response?"
-        },
-        {
-          "id": "B",
-          "text": "The model needs the conversation history to resolve references and maintain continuity.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does stream=True return instead of a single completed response?"
-        },
-        {
-          "id": "C",
-          "text": "No. Distributed execution and other backend details may introduce variation.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What does stream=True return instead of a single completed response?"
-        },
-        {
-          "id": "D",
-          "text": "A sequence of chunks that the client can render incrementally.",
-          "explanation": "Correct: A sequence of chunks that the client can render incrementally."
-        }
-      ],
-      "correct": [
-        "D"
-      ],
-      "takeaway": "A sequence of chunks that the client can render incrementally.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
-    },
-    {
-      "id": "Q31",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "Why is chat history not automatically remembered by the model between separate API calls?",
-      "options": [
-        {
-          "id": "A",
-          "text": "The system message defines application behavior; the user message carries the current request.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: Why is chat history not automatically remembered by the model between separate API calls?"
-        },
-        {
-          "id": "B",
-          "text": "A sequence of chunks that the client can render incrementally.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: Why is chat history not automatically remembered by the model between separate API calls?"
-        },
-        {
-          "id": "C",
-          "text": "Each request is based on the messages and context actually supplied to it.",
-          "explanation": "Correct: Each request is based on the messages and context actually supplied to it."
-        },
-        {
-          "id": "D",
-          "text": "Text arrives incrementally, so each chunk must be read and displayed.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: Why is chat history not automatically remembered by the model between separate API calls?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Each request is based on the messages and context actually supplied to it.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
-    },
-    {
-      "id": "Q32",
-      "section": "development",
-      "difficulty": "application",
-      "type": "single",
-      "question": "What is the trade-off of retaining every past turn indefinitely?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What is the trade-off of retaining every past turn indefinitely?"
-        },
-        {
-          "id": "B",
-          "text": "Set stream=True and consume the response incrementally.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What is the trade-off of retaining every past turn indefinitely?"
-        },
-        {
-          "id": "C",
-          "text": "It can exceed the context window and increase input-token costs.",
-          "explanation": "Correct: It can exceed the context window and increase input-token costs."
-        },
-        {
-          "id": "D",
-          "text": "The system message defines application behavior; the user message carries the current request.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: What is the trade-off of retaining every past turn indefinitely?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "It can exceed the context window and increase input-token costs.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.5 Multi-Round Conversations"
-        }
-      ]
-    },
-    {
-      "id": "Q33",
+      "id": "DEV-20",
       "section": "development",
       "difficulty": "challenging",
-      "type": "single",
-      "question": "What does a lower top_p generally do to sampling?",
+      "type": "multiple",
+      "question": "You are designing a RAG pipeline for the company's internal documents. Which steps belong to the indexing phase rather than the retrieval and generation phase?",
       "options": [
-        {
-          "id": "A",
-          "text": "How concentrated or spread the next-token selection probabilities are.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What does a lower top_p generally do to sampling?"
-        },
-        {
-          "id": "B",
-          "text": "Text arrives incrementally, so each chunk must be read and displayed.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What does a lower top_p generally do to sampling?"
-        },
-        {
-          "id": "C",
-          "text": "Restrict selection to a narrower, more probable candidate pool.",
-          "explanation": "Correct: Restrict selection to a narrower, more probable candidate pool."
-        },
-        {
-          "id": "D",
-          "text": "The user question plus retrieved reference context to generate an answer.",
-          "explanation": "This is a related lesson concept (3.2 Retrieval and generation phase), but this card asks: What does a lower top_p generally do to sampling?"
-        }
+        {"id": "A", "text": "Searching the vector database for the snippets most relevant to the user's query", "explanation": "Searching based on the user's query happens in the retrieval and generation phase, after indexing is complete."},
+        {"id": "B", "text": "Splitting the knowledge documents into chunks", "explanation": "The course describes splitting content into chunks as part of the indexing phase."},
+        {"id": "C", "text": "Converting each chunk into an embedding using specialized models", "explanation": "The course places the conversion of chunks into embeddings in the indexing phase."},
+        {"id": "D", "text": "Combining the retrieved snippets with the original question and passing them to the LLM", "explanation": "Combining retrieved results with the question for the LLM is the generation part of the retrieval and generation phase."},
+        {"id": "E", "text": "Storing the embeddings in a vector database", "explanation": "The course says the indexing phase ends with embeddings stored in a vector database for fast similarity search."}
       ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "Restrict selection to a narrower, more probable candidate pool.",
+      "correct": ["B", "C", "E"],
+      "takeaway": "Indexing = chunk, embed, store in a vector DB; retrieval and generation = search, combine with the query, generate.",
       "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.2 top_p: Control the sampling range of the candidate token set"
-        }
-      ]
-    },
-    {
-      "id": "Q34",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "What does the LLM predict during autoregressive text generation?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Restrict selection to a narrower, more probable candidate pool.",
-          "explanation": "This is a related lesson concept (2.2.2 top_p: Control the sampling range of the candidate token set), but this card asks: What does the LLM predict during autoregressive text generation?"
-        },
-        {
-          "id": "B",
-          "text": "A probability distribution over candidates for the next token.",
-          "explanation": "Correct: A probability distribution over candidates for the next token."
-        },
-        {
-          "id": "C",
-          "text": "Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: What does the LLM predict during autoregressive text generation?"
-        },
-        {
-          "id": "D",
-          "text": "The system message supplied with the API request.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: What does the LLM predict during autoregressive text generation?"
-        }
-      ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "A probability distribution over candidates for the next token.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.1. Text Generation Workflow"
-        }
-      ]
-    },
-    {
-      "id": "Q35",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "Can a generation seed remove every source of nondeterminism?",
-      "options": [
-        {
-          "id": "A",
-          "text": "No; hardware and backend behavior can still prevent full determinism.",
-          "explanation": "Correct: No; hardware and backend behavior can still prevent full determinism."
-        },
-        {
-          "id": "B",
-          "text": "It can exceed the context window and increase input-token costs.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: Can a generation seed remove every source of nondeterminism?"
-        },
-        {
-          "id": "C",
-          "text": "Instruct the model to say the evidence is insufficient instead of fabricating an answer.",
-          "explanation": "This is a related lesson concept (3.2 Retrieval and generation phase), but this card asks: Can a generation seed remove every source of nondeterminism?"
-        },
-        {
-          "id": "D",
-          "text": "Lower temperature, because it concentrates selection on more likely tokens.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: Can a generation seed remove every source of nondeterminism?"
-        }
-      ],
-      "correct": [
-        "A"
-      ],
-      "takeaway": "No; hardware and backend behavior can still prevent full determinism.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.3 Summary"
-        }
-      ]
-    },
-    {
-      "id": "Q36",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "Why does the system role differ from the user role?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Higher temperature, because it allows more varied candidates.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: Why does the system role differ from the user role?"
-        },
-        {
-          "id": "B",
-          "text": "Higher temperature flattens the distribution and generally increases output variety.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: Why does the system role differ from the user role?"
-        },
-        {
-          "id": "C",
-          "text": "The system message defines application behavior; the user message carries the current request.",
-          "explanation": "Correct: The system message defines application behavior; the user message carries the current request."
-        },
-        {
-          "id": "D",
-          "text": "Searchable representations of document chunks, commonly embeddings in a vector store.",
-          "explanation": "This is a related lesson concept (3.1 Indexing phase), but this card asks: Why does the system role differ from the user role?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "The system message defines application behavior; the user message carries the current request.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.4 Basic Conversation Call"
-        }
-      ]
-    },
-    {
-      "id": "Q37",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "Why must a stream client loop over response chunks?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Make document information searchable so relevant passages can be provided to the model.",
-          "explanation": "This is a related lesson concept (3.1 Indexing phase), but this card asks: Why must a stream client loop over response chunks?"
-        },
-        {
-          "id": "B",
-          "text": "Text arrives incrementally, so each chunk must be read and displayed.",
-          "explanation": "Correct: Text arrives incrementally, so each chunk must be read and displayed."
-        },
-        {
-          "id": "C",
-          "text": "Sampling outcomes for the same prompt and generation settings, subject to backend nondeterminism.",
-          "explanation": "This is a related lesson concept (2.2.3 Summary), but this card asks: Why must a stream client loop over response chunks?"
-        },
-        {
-          "id": "D",
-          "text": "Lower temperature, because it concentrates selection on more likely tokens.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: Why must a stream client loop over response chunks?"
-        }
-      ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "Text arrives incrementally, so each chunk must be read and displayed.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "1.6 Streaming Output"
-        }
-      ]
-    },
-    {
-      "id": "Q38",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "What does sampling temperature regulate?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Persisting conversation history in an application store such as a database.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does sampling temperature regulate?"
-        },
-        {
-          "id": "B",
-          "text": "Lower temperature, because it concentrates selection on more likely tokens.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What does sampling temperature regulate?"
-        },
-        {
-          "id": "C",
-          "text": "How concentrated or spread the next-token selection probabilities are.",
-          "explanation": "Correct: How concentrated or spread the next-token selection probabilities are."
-        },
-        {
-          "id": "D",
-          "text": "No. Distributed execution and other backend details may introduce variation.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What does sampling temperature regulate?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "How concentrated or spread the next-token selection probabilities are.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.1 Temperature"
-        }
-      ]
-    },
-    {
-      "id": "Q39",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "When can temperature and top_p be combined?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Truncate less useful turns or summarize prior conversation.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: When can temperature and top_p be combined?"
-        },
-        {
-          "id": "B",
-          "text": "The system message defines application behavior; the user message carries the current request.",
-          "explanation": "This is a related lesson concept (1.4 Basic Conversation Call), but this card asks: When can temperature and top_p be combined?"
-        },
-        {
-          "id": "C",
-          "text": "After testing each control individually, they may be combined for finer control.",
-          "explanation": "Correct: After testing each control individually, they may be combined for finer control."
-        },
-        {
-          "id": "D",
-          "text": "Text arrives incrementally, so each chunk must be read and displayed.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: When can temperature and top_p be combined?"
-        }
-      ],
-      "correct": [
-        "C"
-      ],
-      "takeaway": "After testing each control individually, they may be combined for finer control.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "2.2.3 Summary"
-        }
-      ]
-    },
-    {
-      "id": "Q40",
-      "section": "development",
-      "difficulty": "challenging",
-      "type": "single",
-      "question": "What does the indexing stage store for later retrieval?",
-      "options": [
-        {
-          "id": "A",
-          "text": "Each request is based on the messages and context actually supplied to it.",
-          "explanation": "This is a related lesson concept (1.5 Multi-Round Conversations), but this card asks: What does the indexing stage store for later retrieval?"
-        },
-        {
-          "id": "B",
-          "text": "Searchable representations of document chunks, commonly embeddings in a vector store.",
-          "explanation": "Correct: Searchable representations of document chunks, commonly embeddings in a vector store."
-        },
-        {
-          "id": "C",
-          "text": "Higher temperature flattens the distribution and generally increases output variety.",
-          "explanation": "This is a related lesson concept (2.2.1 Temperature), but this card asks: What does the indexing stage store for later retrieval?"
-        },
-        {
-          "id": "D",
-          "text": "The streamed choice’s delta content.",
-          "explanation": "This is a related lesson concept (1.6 Streaming Output), but this card asks: What does the indexing stage store for later retrieval?"
-        }
-      ],
-      "correct": [
-        "B"
-      ],
-      "takeaway": "Searchable representations of document chunks, commonly embeddings in a vector store.",
-      "sources": [
-        {
-          "file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb",
-          "heading": "3.1 Indexing phase"
-        }
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "3.1 Indexing phase"},
+        {"file": "2_1_Build_Rookie_FAQ_Bot_with_LLM.ipynb", "heading": "3.2 Retrieval and generation phase"}
       ]
     }
-  ],
-  "section": {
-    "id": "development",
-    "title": "LLM Application Development",
-    "previousScore": 65,
-    "target": 40
-  }
+  ]
 }
