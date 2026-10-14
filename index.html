@@ -4,539 +4,216 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f5f0eb">
+  <meta name="theme-color" content="#f4f1ec">
   <title>LLM Engineer · Flashcards</title>
   <style>
     :root {
-      color-scheme: light;
-      --ink: #192f37;
-      --muted: #66787c;
-      --accent: #2c6870;
-      --line: #d9e2df;
-      --paper: #edf2ef;
-      --card: #fff;
-      --highlight: #e9f0db
+      color-scheme: light dark;
+      --bg: #f4f1ec;
+      --ink: #1d2a30;
+      --muted: #7a8589;
+      --accent: #3d6b73;
+      --accent-soft: #e2ecea;
+      --line: #e4e0d8;
+      --card: #fffdf9;
+      --chip: #ebe7e0;
+      --good: #4f8a5b;
+      --good-soft: #eaf3e7;
+      --bad: #c0584a;
+      --bad-soft: #fbece8;
+      --tip: #f4efd9
     }
 
-    * {
-      box-sizing: border-box
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14191b;
+        --ink: #e6ebec;
+        --muted: #8a979b;
+        --accent: #7fb3ba;
+        --accent-soft: #1f2e31;
+        --line: #283236;
+        --card: #1a2124;
+        --chip: #222b2e;
+        --good: #82c290;
+        --good-soft: #1b2b20;
+        --bad: #e58b7e;
+        --bad-soft: #2f1e1b;
+        --tip: #2a2a1d
+      }
     }
+
+    * { box-sizing: border-box }
+
+    html, body { height: 100% }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      background: var(--paper);
+      overflow: hidden;
+      background: var(--bg);
       color: var(--ink);
-      font: 15px/1.55 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+      font: 14px/1.55 "Helvetica Neue", Helvetica, Arial, sans-serif
     }
 
-    button {
-      font: inherit;
-      cursor: pointer
-    }
+    button { font: inherit; color: inherit; cursor: pointer }
 
     .app {
-      width: min(960px, 100%);
+      height: 100dvh;
+      width: min(880px, 100%);
       margin: auto;
-      padding: 32px 28px 48px
-    }
-
-    .masthead {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--line);
-      padding: 2px 0 20px
-    }
-
-    .brand {
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: .2px;
-      margin: 0
-    }
-
-    .brand strong {
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 650
-    }
-
-    .badge {
-      font-size: 11px;
-      font-weight: 650;
-      letter-spacing: .6px;
-      color: var(--accent);
-      background: #dceae5;
-      padding: 7px 11px;
-      border-radius: 6px
-    }
-
-    .intro {
-      padding: 32px 0 22px
-    }
-
-    .eyebrow {
-      margin: 0 0 5px;
-      color: var(--accent);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      font-weight: 700
-    }
-
-    .intro h1 {
-      font-size: clamp(25px, 4vw, 34px);
-      letter-spacing: -.8px;
-      line-height: 1.2;
-      margin: 0;
-      font-weight: 620
-    }
-
-    .intro p:last-child {
-      color: var(--muted);
-      font-size: 13px;
-      margin: 7px 0 0
-    }
-
-    .lesson-wrap {
-      background: #e4ebe6;
-      border-radius: 11px;
-      padding: 13px 15px 15px;
-      margin-bottom: 25px
-    }
-
-    .lesson-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin: 0 0 10px
-    }
-
-    .lesson-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px
-    }
-
-    .lesson-pill {
-      border: 1px solid #cbd7d2;
-      border-radius: 6px;
-      background: #f5f7f4;
-      color: #42585d;
-      padding: 7px 11px;
-      font-size: 12px;
-      transition: background .15s, color .15s, border-color .15s
-    }
-
-    .lesson-pill:hover {
-      border-color: var(--accent);
-      color: var(--accent)
-    }
-
-    .lesson-pill.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white
-    }
-
-    .counter {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      margin: 0 auto 11px;
-      text-align: center;
-      font-variant-numeric: tabular-nums
-    }
-
-    .card {
-      width: 100%;
-      min-height: 510px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: 0 8px 30px #1836380b;
-      padding: 38px clamp(20px, 5vw, 58px);
-      display: flex;
-      align-items: center;
-      justify-content: center
-    }
-
-    .face {
-      width: 100%;
+      padding: 18px 20px 14px;
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 12px
     }
 
-    .front {
-      display: flex
+    header { display: flex; align-items: center; gap: 10px }
+
+    .brand { margin: 0; font-weight: 650; font-size: 15px; letter-spacing: -.2px; flex: 1 }
+    .brand span { color: var(--muted); font-weight: 450 }
+
+    .stat {
+      display: flex; gap: 10px; align-items: center;
+      font-size: 12px; font-variant-numeric: tabular-nums;
+      background: var(--chip); border-radius: 999px; padding: 6px 12px
+    }
+    .stat .ok { color: var(--good); font-weight: 650 }
+    .stat .no { color: var(--bad); font-weight: 650 }
+
+    .icon {
+      border: 0; background: var(--chip); border-radius: 999px;
+      padding: 6px 12px; font-size: 12px
+    }
+    .icon:hover { background: var(--accent-soft); color: var(--accent) }
+
+    .lessons {
+      display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+      margin: 0 -20px; padding: 0 20px
+    }
+    .lessons::-webkit-scrollbar { display: none }
+
+    .pill {
+      flex: 0 0 auto; border: 1px solid var(--line); background: transparent;
+      border-radius: 999px; padding: 6px 13px; font-size: 12px; color: var(--muted);
+      transition: .15s
+    }
+    .pill small { opacity: .75; margin-left: 4px; font-variant-numeric: tabular-nums }
+    .pill:hover { color: var(--accent); border-color: var(--accent) }
+    .pill.active { background: var(--accent); border-color: var(--accent); color: var(--card) }
+
+    .card {
+      flex: 1; min-height: 0; overflow-y: auto;
+      background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+      box-shadow: 0 10px 40px #0000000a;
+      padding: 28px clamp(18px, 5vw, 48px)
     }
 
-    .back {
-      display: none
-    }
+    .face { display: flex; flex-direction: column; gap: 12px; max-width: 660px; margin: auto; min-height: 100% ; justify-content: center }
 
-    .card.revealed .front {
-      display: none
-    }
+    .meta { display: flex; gap: 8px; align-items: center; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600 }
+    .meta .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line) }
+    .meta .dot.ok { background: var(--good) }
+    .meta .dot.no { background: var(--bad) }
 
-    .card.revealed .back {
-      display: flex
-    }
+    .question { margin: 0 0 4px; font-weight: 500; letter-spacing: -.2px; font-size: clamp(18px, 2.6vw, 23px); line-height: 1.42; white-space: pre-line }
 
-    .type {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1.25px;
-      color: var(--accent);
-      font-weight: 700;
-      text-align: center
-    }
-
-    .question {
-      max-width: 680px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(23px, 3.6vw, 31px);
-      line-height: 1.38;
-      font-weight: 400;
-      text-align: center;
-      white-space: pre-line;
-      margin: 2px auto 12px
-    }
-
-    .hint {
-      font-size: 12px;
-      color: #849397;
-      letter-spacing: .02em;
-      text-align: center;
-      margin-top: 3px
-    }
-
-    .options {
-      width: min(650px, 100%);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 4px
-    }
+    .options { display: flex; flex-direction: column; gap: 7px }
 
     .option {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 11px 13px;
-      background: #f5f8f6;
-      border: 1px solid #e3eae6;
-      border-radius: 8px;
-      color: #33494d;
-      font-size: 13px;
-      line-height: 1.45;
-      cursor: pointer;
-      text-align: left
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 10px 13px; border: 1px solid var(--line); border-radius: 12px;
+      font-size: 13px; line-height: 1.45; cursor: pointer; transition: .12s
     }
+    .option:hover { border-color: var(--accent) }
+    .option:has(input:checked) { border-color: var(--accent); background: var(--accent-soft) }
+    .option input { accent-color: var(--accent); margin: 3px 0 0 }
+    .option b { color: var(--muted); margin-right: 4px }
+    .option p { margin: 3px 0 0; color: var(--muted); font-size: 12px }
 
-    .option:hover {
-      border-color: #9fb9b2;
-      background: #f1f6f2
+    .done .option { cursor: default }
+    .done .option:hover { border-color: var(--line) }
+    .done .option.correct { border-color: var(--good); background: var(--good-soft) }
+    .done .option.picked:not(.correct) { border-color: var(--bad); background: var(--bad-soft) }
+    .hint.warn { color: var(--bad) }
+    .tag { margin-left: auto; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; white-space: nowrap }
+
+    .hint { font-size: 12px; color: var(--muted) }
+
+    .verdict { margin: 0; font-size: 18px; font-weight: 650 }
+    .verdict.ok { color: var(--good) }
+    .verdict.no { color: var(--bad) }
+
+    .tip { background: var(--tip); border-radius: 12px; padding: 11px 14px; font-size: 13px }
+    .src { font-size: 11px; color: var(--muted); overflow-wrap: anywhere }
+
+    footer { display: flex; align-items: center; gap: 8px }
+    .nav, .reveal {
+      border: 1px solid var(--line); background: var(--card); border-radius: 12px;
+      height: 42px; min-width: 42px; display: grid; place-items: center; font-size: 16px
     }
+    .nav:hover { background: var(--accent-soft) }
+    .reveal { flex: 1; border: 0; background: var(--accent); color: var(--card); font-size: 13px; font-weight: 650 }
+    .reveal:hover { filter: brightness(1.08) }
+    .count { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 52px; text-align: center }
+    .bar { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: -4px }
+    .bar div { height: 100%; background: var(--accent); transition: width .2s }
 
-    .option input {
-      accent-color: var(--accent);
-      margin: 3px 0 0;
-      flex: 0 0 auto
+    .drawer {
+      position: fixed; inset: 0 0 0 auto; width: min(380px, 100%);
+      background: var(--card); border-left: 1px solid var(--line);
+      box-shadow: -10px 0 40px #00000014; padding: 18px;
+      display: flex; flex-direction: column; gap: 12px;
+      transform: translateX(105%); transition: transform .2s
     }
+    .drawer.open { transform: none }
+    .drawer h2 { margin: 0; font-size: 15px; flex: 1 }
+    .drawer-head { display: flex; align-items: center; gap: 8px }
+    .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center }
+    .summary div { background: var(--chip); border-radius: 12px; padding: 10px 4px; font-size: 11px; color: var(--muted) }
+    .summary strong { display: block; font-size: 20px; color: var(--ink); font-variant-numeric: tabular-nums }
+    .log { flex: 1; overflow-y: auto; margin: 0; padding: 0; list-style: none }
+    .log li { display: flex; gap: 10px; align-items: baseline; padding: 9px 4px; border-bottom: 1px solid var(--line); font-size: 12px; cursor: pointer }
+    .log li:hover { background: var(--accent-soft) }
+    .log .r { font-weight: 700; width: 14px }
+    .log .q { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .log time { color: var(--muted); font-size: 11px; white-space: nowrap }
+    .empty { color: var(--muted); text-align: center; padding: 30px 0; font-size: 13px }
 
-    .option b {
-      color: #809297;
-      font-size: 11px;
-      margin-right: 4px
-    }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 
-    .option.correct {
-      border-color: #9db878;
-      background: #f2f6e9
-    }
-
-    .option.wrong {
-      border-color: #d5aaa1;
-      background: #fbf2ef
-    }
-
-    .option.picked {
-      box-shadow: inset 4px 0 0 var(--accent)
-    }
-
-    .option .mark {
-      font-weight: 700;
-      margin-left: auto;
-      font-size: 11px;
-      white-space: nowrap
-    }
-
-    .verdict {
-      margin: 0 0 10px;
-      font-size: 13px;
-      font-weight: 650
-    }
-
-    .answer {
-      font-size: 15px;
-      line-height: 1.55;
-      text-align: center
-    }
-
-    .answer h2 {
-      font-size: 21px;
-      color: var(--accent);
-      font-weight: 650;
-      margin: 0
-    }
-
-    .answer .type {
-      margin-bottom: 2px
-    }
-
-    .answer .options {
-      margin-top: 5px
-    }
-
-    .answer .option {
-      cursor: default
-    }
-
-    .answer .option:hover {
-      border-color: #e3eae6;
-      background: #f5f8f6
-    }
-
-    .answer .option.correct:hover {
-      border-color: #9db878;
-      background: #f2f6e9
-    }
-
-    .answer .option.wrong:hover {
-      border-color: #d5aaa1;
-      background: #fbf2ef
-    }
-
-    .takeaway {
-      background: var(--highlight);
-      padding: 13px 16px;
-      border-radius: 8px;
-      text-align: left;
-      font-size: 13px;
-      color: #354631;
-      align-self: stretch;
-      margin-top: 5px
-    }
-
-    .sources {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: left;
-      align-self: stretch;
-      margin-top: 3px
-    }
-
-    .sources p {
-      margin: 5px 0
-    }
-
-    .sources code {
-      white-space: normal;
-      overflow-wrap: anywhere
-    }
-
-    .progress {
-      width: 100%;
-      height: 4px;
-      background: #dce5e0;
-      border-radius: 4px;
-      margin-top: 19px;
-      overflow: hidden
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--accent);
-      transition: width .2s
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 17px
-    }
-
-    .nav {
-      width: 44px;
-      height: 44px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #fff;
-      font-size: 19px;
-      color: var(--ink);
-      display: grid;
-      place-items: center;
-      transition: background .12s
-    }
-
-    .nav:hover:not(:disabled) {
-      background: #e1ebe6
-    }
-
-    .nav:disabled {
-      opacity: .4;
-      cursor: default
-    }
-
-    .reveal {
-      min-width: 138px;
-      border: 0;
-      border-radius: 8px;
-      background: var(--accent);
-      color: #fff;
-      padding: 12px 24px;
-      font-size: 13px;
-      font-weight: 650
-    }
-
-    .reveal:hover {
-      background: #24575e
-    }
-
-    .shuffle {
-      display: block;
-      margin: 12px auto 0;
-      padding: 7px 12px;
-      border: 1px solid #cbd7d2;
-      border-radius: 6px;
-      background: transparent;
-      color: #607478;
-      font-size: 12px
-    }
-
-    .shuffle:hover {
-      background: #fff;
-      color: var(--accent)
-    }
-
-    .keys {
-      font-size: 10px;
-      color: #849397;
-      margin-top: 13px;
-      text-align: center
-    }
-
-    .keys kbd {
-      font: inherit;
-      background: #e1e8e3;
-      border-radius: 4px;
-      padding: 3px 6px;
-      margin: 0 3px
-    }
-
-    .empty {
-      min-height: 300px;
-      display: grid;
-      place-items: center;
-      color: var(--muted);
-      text-align: center
-    }
-
-    :focus-visible {
-      outline: 3px solid #c27843;
-      outline-offset: 3px
-    }
-
-    @media(max-width:600px) {
-      .app {
-        padding: 17px 14px 30px
-      }
-
-      .masthead {
-        padding-bottom: 14px
-      }
-
-      .intro {
-        padding: 24px 0 17px
-      }
-
-      .lesson-wrap {
-        padding: 11px;
-        margin-bottom: 21px
-      }
-
-      .lesson-bar {
-        gap: 6px
-      }
-
-      .lesson-pill {
-        padding: 7px 9px;
-        font-size: 11px
-      }
-
-      .card {
-        min-height: 520px;
-        padding: 26px 17px;
-        border-radius: 15px
-      }
-
-      .question {
-        font-size: 23px
-      }
-
-      .option {
-        font-size: 12px;
-        padding: 10px
-      }
-
-      .controls {
-        gap: 9px
-      }
-
-      .keys {
-        line-height: 2
-      }
+    @media (max-width: 600px) {
+      .app { padding: 12px 14px 10px; gap: 10px }
+      .lessons { margin: 0 -14px; padding: 0 14px }
+      .brand span { display: none }
+      .card { padding: 20px 16px; border-radius: 16px }
     }
   </style>
 </head>
 
 <body>
   <main class="app">
-    <header class="masthead">
-      <p class="brand"><strong>LLM Engineer Professional</strong> / Study cards</p><span class="badge">120 PRACTICE QUESTIONS</span>
+    <header>
+      <p class="brand">LLM Engineer <span>· 120 PRACTICE QUESTIONS</span></p>
+      <div class="stat" id="stat" title="Correct / wrong in this lesson (latest attempt per card)"></div>
+      <button class="icon" id="historyBtn" aria-label="Show history">History</button>
     </header>
-    <section class="intro">
-      <p class="eyebrow">Certification preparation</p>
-      <h1>Learn one idea at a time.</h1>
-      <p>Think through the question. Reveal when you’re ready.</p>
+    <nav class="lessons" id="lessons" aria-label="Filter cards by lesson"></nav>
+    <section class="card" id="card" aria-label="Flashcard" aria-live="polite">
+      <div class="face" id="front"></div>
     </section>
-    <div class="lesson-wrap">
-      <p class="lesson-label">Choose a lesson</p>
-      <nav class="lesson-bar" id="lessons" aria-label="Filter cards by lesson"></nav>
-    </div>
-    <div class="counter" id="counter" aria-live="polite">Loading cards…</div>
-    <section class="card" id="card" aria-label="Flashcard">
-      <div class="face front" id="front"></div>
-      <div class="face back answer" id="back"></div>
-    </section>
-    <div class="progress" aria-label="Progress through this lesson">
-      <div class="progress-fill" id="progress"></div>
-    </div>
-    <div class="controls"><button class="nav" id="previous" aria-label="Previous card">←</button><button class="reveal"
-        id="flip">Reveal</button><button class="nav" id="next" aria-label="Next card">→</button></div>
-    <button class="shuffle" id="shuffle">⇄ &nbsp; Shuffle</button>
-    <div class="keys"><kbd>A</kbd>–<kbd>E</kbd> pick &nbsp; <kbd>Space</kbd> reveal &nbsp; <kbd>←</kbd> <kbd>→</kbd> navigate
-      &nbsp; <kbd>S</kbd> shuffle</div>
-
+    <div class="bar"><div id="progress"></div></div>
+    <footer>
+      <button class="nav" id="previous" aria-label="Previous card">←</button>
+      <button class="nav" id="shuffle" aria-label="Reshuffle" title="Reshuffle (S)">⇄</button>
+      <button class="reveal" id="flip">Submit</button>
+      <span class="count" id="counter"></span>
+      <button class="nav" id="next" aria-label="Next card">→</button>
+    </footer>
   </main>
+  <aside class="drawer" id="drawer" aria-label="History">
+    <div class="drawer-head"><h2>History</h2><button class="icon" id="clear">Clear</button><button class="icon" id="close" aria-label="Close history">✕</button></div>
+    <div class="summary" id="summary"></div>
+    <ul class="log" id="log"></ul>
+  </aside>
   <script id="question-bank" type="application/json">{
   "version": 2,
   "title": "LLM Engineer Professional — Practice set 02",
@@ -5714,21 +5391,110 @@
   <script>
     'use strict';
     const bank = JSON.parse(document.getElementById('question-bank').textContent);
-    const lessons = bank.sections.map(({ id, title }) => ({ id, title }));
-    let lesson = lessons[0].id, deck = [], position = 0, revealed = false, order = [], shuffleOn = false;
+    const byId = Object.fromEntries(bank.questions.map(q => [q.id, q]));
+    const KEY = 'llm-flashcards-history';
+    let lesson = bank.sections[0].id, deck = [], position = 0, revealed = false, opts = [];
+    // Questions and options are always shuffled; options get display letters A–E by position.
+    const mix = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0;[a[i], a[j]] = [a[j], a[i]] } return a };
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem(KEY)) || [] } catch { }
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(history)) } catch { } };
     const $ = id => document.getElementById(id);
-    const safe = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    function buildDeck() { const ids = order.length ? order : bank.questions.map(q => q.id); deck = ids.map(id => bank.questions.find(q => q.id === id)).filter(q => q.section === lesson); position = Math.min(position, Math.max(deck.length - 1, 0)); revealed = false; draw() }
-    function draw() { const card = $('card'), q = deck[position]; $('lessons').innerHTML = lessons.map(item => `<button class="lesson-pill ${lesson === item.id ? 'active' : ''}" data-lesson="${safe(item.id)}" aria-pressed="${lesson === item.id}">${safe(item.title)}</button>`).join(''); if (!q) { $('counter').textContent = 'No cards in this lesson'; $('front').innerHTML = '<p class="empty">Nothing here yet.</p>'; $('back').innerHTML = ''; return } card.classList.toggle('revealed', revealed); const section = bank.sections.find(s => s.id === q.section); $('counter').textContent = `${position + 1} / ${deck.length}`; $('progress').style.width = `${(position + 1) / deck.length * 100}%`; $('front').innerHTML = `<span class="type">${safe(section.title)} · ${q.type === 'single' ? 'Single choice' : 'Multiple choice'}</span><h1 class="question">${safe(q.question)}</h1><div class="options">${q.options.map(o => `<label class="option"><input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="choice" value="${safe(o.id)}"><span><b>${safe(o.id)}</b> ${safe(o.text)}</span></label>`).join('')}</div><span class="hint">${q.type === 'single' ? 'Choose one answer' : 'Select all that apply'}, then press Space or Reveal</span>`; drawBack(); $('flip').textContent = revealed ? 'Show question' : 'Reveal'; $('previous').disabled = deck.length < 2; $('next').disabled = deck.length < 2 }
-    function drawBack() { const q = deck[position], section = bank.sections.find(s => s.id === q.section); const picked = [...$('front').querySelectorAll('input:checked')].map(i => i.value); const right = picked.length && picked.length === q.correct.length && picked.every(id => q.correct.includes(id)); const verdict = picked.length ? (right ? '✓ Your answer is correct' : `✗ Your answer: ${picked.join(', ')}`) : 'You did not select an answer'; $('back').innerHTML = `<span class="type">${safe(section.title)} · Answer</span><p class="verdict">${safe(verdict)}</p><h2>${q.correct.join(', ')}</h2><div class="options">${q.options.map(o => `<div class="option ${q.correct.includes(o.id) ? 'correct' : 'wrong'} ${picked.includes(o.id) ? 'picked' : ''}"><span><b>${safe(o.id)}</b> ${safe(o.text)}<br><span>${safe(o.explanation)}</span></span>${picked.includes(o.id) ? '<span class="mark">your pick</span>' : ''}</div>`).join('')}</div><div class="takeaway"><strong>Remember</strong><br>${safe(q.takeaway)}</div><div class="sources"><strong>Lesson reference</strong>${q.sources.map(s => `<p><code>${safe(s.file)}</code><br>${safe(s.heading)}</p>`).join('')}</div>` }
-    function flip() { if (!deck.length) return; revealed = !revealed; if (revealed) drawBack(); $('card').classList.toggle('revealed', revealed); $('flip').textContent = revealed ? 'Show question' : 'Reveal' }
-    function move(step) { if (!deck.length) return; position = (position + step + deck.length) % deck.length; revealed = false; draw() }
-    function shuffle(ids) { for (let i = ids.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[ids[i], ids[j]] = [ids[j], ids[i]] } return ids }
-    $('lessons').addEventListener('click', e => { const b = e.target.closest('[data-lesson]'); if (!b) return; lesson = b.dataset.lesson; order = []; shuffleOn = false; position = 0; $('shuffle').textContent = '⇄  Shuffle'; buildDeck() }); $('card').addEventListener('click', e => { if (e.target.closest('input,label')) return; flip() }); $('flip').onclick = flip; $('previous').onclick = () => move(-1); $('next').onclick = () => move(1); $('shuffle').onclick = () => { shuffleOn = !shuffleOn; order = shuffleOn ? shuffle(bank.questions.map(q => q.id)) : []; position = 0; buildDeck(); $('shuffle').textContent = shuffleOn ? '⇄  In order' : '⇄  Shuffle' };
-    // Capture phase: Space always reveals, even when a button/input has focus (otherwise Space clicks the focused Next button).
-    document.addEventListener('keydown', e => { if (e.metaKey || e.ctrlKey || e.altKey) return; const k = e.key.toLowerCase(); if (e.code === 'Space' || k === 'enter') { e.preventDefault(); if (!e.repeat) flip() } else if (k === 'arrowleft') { e.preventDefault(); move(-1) } else if (k === 'arrowright') { e.preventDefault(); move(1) } else if (k === 's') $('shuffle').click(); else if (!revealed && /^[a-e1-5]$/.test(k)) { const q = deck[position], idx = /\d/.test(k) ? +k - 1 : k.charCodeAt(0) - 97, input = $('front').querySelectorAll('input')[idx]; if (input) input.checked = q.type === 'single' ? true : !input.checked } }, true);
+    const safe = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    // Latest result per question id.
+    const latest = () => { const m = {}; for (const h of history) m[h.id] = h.ok; return m };
+
+    function buildDeck() {
+      deck = mix(bank.questions.filter(q => q.section === lesson));
+      position = 0; revealed = false; draw();
+    }
+
+    function drawChrome() {
+      const last = latest();
+      $('lessons').innerHTML = bank.sections.map(s => {
+        const ids = bank.questions.filter(q => q.section === s.id).map(q => q.id);
+        const ok = ids.filter(id => last[id]).length;
+        return `<button class="pill ${s.id === lesson ? 'active' : ''}" data-lesson="${safe(s.id)}" aria-pressed="${s.id === lesson}">${safe(s.title)}<small>${ok}/${ids.length}</small></button>`;
+      }).join('');
+      const ids = deck.map(q => q.id), ok = ids.filter(id => last[id] === true).length, no = ids.filter(id => last[id] === false).length;
+      $('stat').innerHTML = `<span class="ok">✓ ${ok}</span><span class="no">✗ ${no}</span><span>${ok + no ? Math.round(ok / (ok + no) * 100) : 0}%</span>`;
+    }
+
+    function draw() {
+      drawChrome();
+      const q = deck[position];
+      if (!q) { $('front').innerHTML = '<p class="empty">Nothing here yet.</p>'; return }
+      const last = latest()[q.id], section = bank.sections.find(s => s.id === q.section);
+      $('counter').textContent = `${position + 1} / ${deck.length}`;
+      $('progress').style.width = `${(position + 1) / deck.length * 100}%`;
+      opts = mix(q.options).map((o, i) => ({ ...o, label: 'ABCDE'[i] }));
+      $('front').classList.remove('done');
+      $('front').innerHTML = `<div class="meta"><span class="dot ${last === true ? 'ok' : last === false ? 'no' : ''}"></span>${safe(q.id)} · ${q.type === 'single' ? 'Single choice' : 'Multiple choice'} · ${safe(q.difficulty)}</div>
+        <h1 class="question">${safe(q.question)}</h1>
+        <div class="options">${opts.map(o => `<label class="option"><input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="choice" value="${safe(o.id)}"><span><b>${o.label}</b>${safe(o.text)}</span></label>`).join('')}</div>
+        <span class="hint" id="hint">${q.type === 'single' ? 'Choose one answer' : 'Select all that apply'} · Enter to submit</span>`;
+      $('card').scrollTop = 0;
+      $('flip').textContent = 'Submit';
+    }
+
+    function submit() {
+      if (!deck.length) return;
+      if (revealed) return move(1);
+      const q = deck[position], picked = [...$('front').querySelectorAll('input:checked')].map(i => i.value);
+      if (!picked.length) { $('hint').classList.add('warn'); $('hint').textContent = 'Pick an answer first'; return }
+      const ok = picked.length === q.correct.length && picked.every(id => q.correct.includes(id));
+      revealed = true;
+      history.push({ id: q.id, ok, picked, t: Date.now() }); save();
+      $('front').classList.add('done');
+      $('front').querySelector('.options').outerHTML = `<p class="verdict ${ok ? 'ok' : 'no'}">${ok ? '✓ Correct' : `✗ Wrong — answer: ${opts.filter(o => q.correct.includes(o.id)).map(o => o.label).join(', ')}`}</p>
+        <div class="options">${opts.map(o => `<div class="option ${q.correct.includes(o.id) ? 'correct' : ''} ${picked.includes(o.id) ? 'picked' : ''}"><span><b>${o.label}</b>${safe(o.text)}<p>${safe(o.explanation)}</p></span>${q.correct.includes(o.id) ? '<span class="tag">correct</span>' : picked.includes(o.id) ? '<span class="tag">your pick</span>' : ''}</div>`).join('')}</div>`;
+      $('hint').outerHTML = `<div class="tip"><strong>Remember</strong> — ${safe(q.takeaway)}</div>
+        <div class="src">${q.sources.map(s => `${safe(s.file)} — ${safe(s.heading)}`).join('<br>')}</div>`;
+      $('flip').textContent = 'Next →';
+      drawChrome(); drawHistory();
+    }
+
+    function move(step) { if (deck.length) { position = (position + step + deck.length) % deck.length; revealed = false; draw() } }
+
+    function drawHistory() {
+      const ok = history.filter(h => h.ok).length;
+      $('summary').innerHTML = `<div><strong>${history.length}</strong>attempts</div><div><strong>${ok}</strong>correct</div><div><strong>${history.length ? Math.round(ok / history.length * 100) : 0}%</strong>accuracy</div>`;
+      $('log').innerHTML = history.length ? history.slice().reverse().map(h => {
+        const q = byId[h.id]; if (!q) return '';
+        return `<li data-id="${safe(h.id)}" title="${safe(q.question)}"><span class="r" style="color:var(--${h.ok ? 'good' : 'bad'})">${h.ok ? '✓' : '✗'}</span><span class="q"><b>${safe(h.id)}</b> ${safe(q.question)}</span><time>${new Date(h.t).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</time></li>`;
+      }).join('') : '<li class="empty">No attempts yet. Pick an answer and reveal.</li>';
+    }
+
+    $('lessons').onclick = e => { const b = e.target.closest('[data-lesson]'); if (b) { lesson = b.dataset.lesson; buildDeck() } };
+    $('flip').onclick = submit;
+    $('previous').onclick = () => move(-1);
+    $('next').onclick = () => move(1);
+    $('shuffle').onclick = buildDeck;
+    $('historyBtn').onclick = () => $('drawer').classList.toggle('open');
+    $('close').onclick = () => $('drawer').classList.remove('open');
+    $('clear').onclick = () => { if (history.length && confirm('Clear all history?')) { history = []; save(); drawHistory(); drawChrome(); draw() } };
+    $('log').onclick = e => {
+      const li = e.target.closest('[data-id]'); if (!li) return;
+      const q = byId[li.dataset.id]; lesson = q.section;
+      buildDeck(); position = deck.indexOf(q); draw(); $('drawer').classList.remove('open');
+    };
+    // Capture phase: Enter/Space always submits, even when a button/input has focus.
+    document.addEventListener('keydown', e => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const k = e.key.toLowerCase();
+      if (e.code === 'Space' || k === 'enter') { e.preventDefault(); if (!e.repeat) submit() }
+      else if (k === 'arrowleft') { e.preventDefault(); move(-1) }
+      else if (k === 'arrowright') { e.preventDefault(); move(1) }
+      else if (k === 's') $('shuffle').click();
+      else if (k === 'h') $('historyBtn').click();
+      else if (k === 'escape') $('drawer').classList.remove('open');
+      else if (!revealed && /^[a-e1-5]$/.test(k)) {
+        const idx = /\d/.test(k) ? +k - 1 : k.charCodeAt(0) - 97, input = $('front').querySelectorAll('input')[idx];
+        if (input) input.checked = input.type === 'radio' ? true : !input.checked;
+      }
+    }, true);
     document.addEventListener('keyup', e => { if (e.code === 'Space') e.preventDefault() }, true);
-    buildDeck();
+    buildDeck(); drawHistory();
   </script>
 </body>
 
